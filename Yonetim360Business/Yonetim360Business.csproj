@@ -1,0 +1,14 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Yonetim360.DataAccess\Yonetim360.DataAccess.csproj" />
+    <ProjectReference Include="..\Yonetim360.Entity\Yonetim360.Entity.csproj" />
+  </ItemGroup>
+
+</Project>
