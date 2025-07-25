@@ -16,12 +16,12 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Controllers\" />
+    <ProjectReference Include="..\Yonetim360.DataAccess\Yonetim360.DataAccess.csproj" />
+    <ProjectReference Include="..\Yonetim360Business\Yonetim360Business.csproj" />
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Yonetim360.DataAccess\Yonetim360.DataAccess.csproj" />
-    <ProjectReference Include="..\Yonetim360Business\Yonetim360Business.csproj" />
+    <Folder Include="Controllers\" />
   </ItemGroup>
 
 </Project>
