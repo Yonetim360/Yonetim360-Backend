@@ -15,78 +15,80 @@ namespace Yonetim360.DataAccess.Repository.Concrete
     {
         private readonly ApplicationDbContext _context;
         private readonly DbSet<T> _dbSet;
-        public Repository(ApplicationDbContext context, DbSet<T> dbSet)
+        public Repository(ApplicationDbContext context)
         {
             _context = context;
-            _dbSet = dbSet;
+            _dbSet = _context.Set<T>();
         }
         #region WriteRepository
 
         public async Task CreateAsync(T entity)
         {
             await _dbSet.AddAsync(entity);
-            await _context.SaveChangesAsync();
+
         }
 
-        public async Task DeleteAsync(T entity)
+        public  Task DeleteAsync(T entity)
         {
-             _dbSet.Remove(entity);
-            await _context.SaveChangesAsync();
+            _dbSet.Remove(entity);
+            return Task.CompletedTask;
+
         }
-        public async Task UpdateAsync(T entity)
+        public  Task UpdateAsync(T entity)
         {
             _dbSet.Update(entity);
-            await _context.SaveChangesAsync();
+            return Task.CompletedTask;
+
         }
         #endregion
 
         #region ReadRepository
-        public async Task<IEnumerable<T>> GetAllAsync(Expression<Func<T, bool>>? filter, int pageSize = 100, int pageNumber = 1)
+        public async Task<IEnumerable<T>> GetAllAsync(Expression<Func<T, bool>>? filter, bool tracked = false, int pageSize = 100, int pageNumber = 1)
         {
             IQueryable<T> query = _dbSet;
+
+            if (!tracked)
+                query = query.AsNoTracking();
+
             if (filter != null)
-            {
                 query = query.Where(filter);
-            }
+
             if (pageSize > 0)
             {
                 if (pageSize > 100)
-                {
                     pageSize = 100;
-                }
+
                 query = query.Skip(pageSize * (pageNumber - 1)).Take(pageSize);
             }
-            return await query.AsNoTracking().ToListAsync();
+
+            return await query.ToListAsync();
         }
 
         public async Task<T?> GetFirstOrDefaultAsync(Expression<Func<T, bool>> filter, bool tracked = true, Func<IQueryable<T>, IIncludableQueryable<T, object>>? include = null)
         {
-            var query = CreateQuery(filter, include);
-
-            if (!tracked)
-            {
-                query = query.AsNoTracking();
-            }
-
-            return await query.FirstOrDefaultAsync(filter);
+            IQueryable<T> query = CreateQuery(filter, include, tracked);
+            return await query.FirstOrDefaultAsync();
         }
 
 
         public IQueryable<T> CreateQuery(Expression<Func<T, bool>>? predicate = null,
-           Func<IQueryable<T>, IIncludableQueryable<T, object>>? include = null)
+           Func<IQueryable<T>, IIncludableQueryable<T, object>>? include = null, bool tracked = true)
         {
-            IQueryable<T> query = _dbSet.AsNoTracking();
+            IQueryable<T> query = _dbSet;
+
+            if (!tracked)
+                query = query.AsNoTracking();
 
             if (include != null)
-            {
                 query = include(query);
-            }
+
             if (predicate != null)
-            {
                 query = query.Where(predicate);
-            }
+
             return query;
         }
+
+
         #endregion
     }
 }
