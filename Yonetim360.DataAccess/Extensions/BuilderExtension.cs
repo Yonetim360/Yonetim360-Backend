@@ -9,6 +9,8 @@ using System.Text;
 using System.Threading.Tasks;
 using Yonetim360.DataAccess.Data;
 using Yonetim360.DataAccess.Services;
+using Yonetim360.DataAccess.UnitOfWorks.Abstract;
+using Yonetim360.DataAccess.UnitOfWorks.Concrete;
 
 namespace Yonetim360.DataAccess.Extensions
 {
@@ -23,7 +25,7 @@ namespace Yonetim360.DataAccess.Extensions
                 options.UseSqlServer(configuration.GetConnectionString("DefaultConnection"));
             });
 
-
+            services.AddScoped<IUnitOfWork, UnitOfWork>();
             return services;
         }
     }
