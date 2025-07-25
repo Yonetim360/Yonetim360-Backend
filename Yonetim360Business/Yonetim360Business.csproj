@@ -7,6 +7,13 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="FluentValidation" Version="11.0.0" />
+    <PackageReference Include="FluentValidation.DependencyInjectionExtensions" Version="11.0.0" />
+    <PackageReference Include="MediatR" Version="11.0.0" />
+    <PackageReference Include="MediatR.Extensions.Microsoft.DependencyInjection" Version="11.0.0" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\Yonetim360.DataAccess\Yonetim360.DataAccess.csproj" />
     <ProjectReference Include="..\Yonetim360.Entity\Yonetim360.Entity.csproj" />
   </ItemGroup>
