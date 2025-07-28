@@ -10,8 +10,12 @@ namespace Yonetim360.DataAccess.Services
 {
     public class TenantProvider : ITenantProvider
     {
-        private readonly IHttpContextAccessor _httpContextAccessor;
+       private readonly IHttpContextAccessor _httpContextAccessor;
 
+        public TenantProvider(IHttpContextAccessor httpContextAccessor)
+        {
+            _httpContextAccessor = httpContextAccessor;
+        }
         public Guid TenantId
         {
             get
@@ -26,14 +30,11 @@ namespace Yonetim360.DataAccess.Services
                     }
                 }
 
-                return Guid.Empty; // default veya fallback değeri
+                return Guid.Empty;
             }
         }
 
-        public TenantProvider(IHttpContextAccessor accessor)
-        {
-            _httpContextAccessor = accessor;
-        }
+
     }
 }
 
