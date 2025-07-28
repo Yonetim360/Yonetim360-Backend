@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using Yonetim360.DataAccess.Extensions;
 using Yonetim360.DataAccess.Services;
 using Yonetim360.Entity;
+using Yonetim360.Entity.CRM;
 
 namespace Yonetim360.DataAccess.Data
 {
@@ -22,6 +23,8 @@ namespace Yonetim360.DataAccess.Data
         }
 
         public DbSet<Company> Companies { get; set; }
+        public DbSet<Customer> Customers { get; set; }
+        public DbSet<User> Users { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

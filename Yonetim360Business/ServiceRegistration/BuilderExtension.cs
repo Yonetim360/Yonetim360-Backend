@@ -8,7 +8,9 @@ using System.Text;
 using System.Threading.Tasks;
 using Yonetim360.DataAccess.Data;
 using Yonetim360Business.Behaviors;
+using Yonetim360Business.CQRS.CRM.Customers.Commands.CreateCustomer;
 using Yonetim360Business.CQRS.Users.CreateUser;
+using Yonetim360Business.MappingProfile.CRM;
 
 namespace Yonetim360Business.ServiceRegistration
 {
@@ -18,7 +20,8 @@ namespace Yonetim360Business.ServiceRegistration
         {
             services.AddMediatR(typeof(CreateUserCommandHandler).Assembly);
             services.AddTransient(typeof(IPipelineBehavior<,>), typeof(ValidationBehavior<,>));
-            services.AddValidatorsFromAssemblyContaining<CreateUserCommandValidator>();
+            services.AddValidatorsFromAssemblyContaining<CreateCustomerCommand>();
+            services.AddAutoMapper(typeof(MappingConfig));
 
             return services;
 
