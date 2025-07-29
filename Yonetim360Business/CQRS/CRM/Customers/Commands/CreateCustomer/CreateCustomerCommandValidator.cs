@@ -14,9 +14,6 @@ namespace Yonetim360Business.CQRS.CRM.Customers.Commands.CreateCustomer
             RuleFor(x => x.UserId)
             .NotEmpty().WithMessage("UserId is required.");
 
-            RuleFor(x => x.TenantId)
-                .NotEmpty().WithMessage("TenantId is required.");
-
             RuleFor(x => x.CompanyName)
                 .NotEmpty().WithMessage("Company name is required.")
                 .MaximumLength(100).WithMessage("Company name must not exceed 100 characters.");

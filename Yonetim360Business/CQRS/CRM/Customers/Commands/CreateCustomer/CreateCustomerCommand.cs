@@ -11,7 +11,6 @@ namespace Yonetim360Business.CQRS.CRM.Customers.Commands.CreateCustomer
     public class CreateCustomerCommand:ICommand<bool>
     {
         public Guid UserId { get; set; }
-        public Guid TenantId { get; set; }
         public string CompanyName { get; set; }
         public string ContactPerson { get; set; }
         public string Email { get; set; }
