@@ -17,6 +17,7 @@ namespace Yonetim360.Entity.CRM
         public DateTime StartDateTime { get; set; }       // → 29.07.2025 19:00
         public int DurationInMinutes { get; set; }
         public ICollection<Representative> Representatives { get; set; } = new List<Representative>();
+        public ConversationStatus? ConversationStatus  { get; set; }
     }
 
     public enum ConversationType
@@ -26,5 +27,11 @@ namespace Yonetim360.Entity.CRM
         Meeting = 3,
         Chat = 4,
         Other = 5
+    }
+    public enum ConversationStatus
+    {
+        Completed = 1,   
+        Cancelled = 2,   
+        NoShow = 3 //görüşmeye gelinmedi
     }
 }
