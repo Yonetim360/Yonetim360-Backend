@@ -19,7 +19,7 @@ namespace Yonetim360.Entity.CRM
         public string ServiceExplanation { get; set; }
 
         #region Fiyatlandırma kısmı
-        public string Amount { get; set; }
+        public decimal Amount { get; set; }
         public decimal? DiscountValue { get; set; }
         public DiscountType? DiscountType { get; set; }
         public decimal? FinalAmount { get; set; }
@@ -43,11 +43,11 @@ namespace Yonetim360.Entity.CRM
     }
     public enum Currency
     {
-        TRY, // Türk Lirası
-        USD, // Amerikan Doları
-        EUR, // Euro
-        GBP, // İngiliz Sterlini
-        JPY  // Japon Yeni
+        TRY=0, // Türk Lirası
+        USD=1, // Amerikan Doları
+        EUR=2,// Euro
+        GBP=3, // İngiliz Sterlini
+        JPY=4  // Japon Yeni
     }
     public enum DiscountType
     {
