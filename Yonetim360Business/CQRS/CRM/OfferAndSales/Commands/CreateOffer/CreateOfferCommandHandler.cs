@@ -28,9 +28,24 @@ namespace Yonetim360Business.CQRS.CRM.OfferAndSales.Commands.CreateOffer
 
         public async Task<bool> Handle(CreateOfferCommand request, CancellationToken cancellationToken)
         {
-            var user = _userRepository.GetFirstOrDefaultAsync(x => x.Id == request.UserId) ??
+            var user = await _userRepository.GetFirstOrDefaultAsync(x => x.Id == request.UserId) ??
                 throw new InvalidDataException("Not found an user");
             var offer = _mapper.Map<Offer>(request);
+
+            switch (request.DiscountType)
+            {
+                case DiscountType.Percentage:
+                    offer.FinalAmount = request.Amount - (request.Amount * request.DiscountValue / 100);
+                    break;
+                case DiscountType.FixedAmount:
+                    offer.FinalAmount = request.Amount - request.DiscountValue;
+                    break;
+                case DiscountType.None:
+                default:
+                    offer.FinalAmount = request.Amount;
+                    break;
+            }
+
             await _offerRepository.CreateAsync(offer);
             await _unitOfWork.CommitAsync();
             return true;

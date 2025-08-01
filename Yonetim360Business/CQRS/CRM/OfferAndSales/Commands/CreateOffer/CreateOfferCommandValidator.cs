@@ -32,25 +32,13 @@ namespace Yonetim360Business.CQRS.CRM.OfferAndSales.Commands.CreateOffer
                 .MaximumLength(1000).WithMessage("Service explanation can be up to 1000 characters.");
 
             RuleFor(x => x.Amount)
-                .NotEmpty().WithMessage("Amount cannot be empty.")
-                .Must(amount =>
-                    decimal.TryParse(
-                        amount?.Replace("₺", "")
-                               .Replace("$", "")
-                               .Replace(",", "")
-                               .Replace(".", ","),
-                        out _)
-                ).WithMessage("Amount must be a valid number.");
+                .GreaterThan(0).WithMessage("Amount must be greater than zero.");
 
             RuleFor(x => x.DiscountType)
                 .IsInEnum().WithMessage("Invalid discount type.");
 
             RuleFor(x => x.DiscountValue)
                 .GreaterThanOrEqualTo(0).WithMessage("Discount value cannot be negative.");
-
-            RuleFor(x => x.FinalAmount)
-                .GreaterThanOrEqualTo(0).When(x => x.FinalAmount.HasValue)
-                .WithMessage("Final amount cannot be negative.");
 
             RuleFor(x => x.ValidityDate)
                 .GreaterThan(DateTime.Now).WithMessage("Validity date must be in the future.");
