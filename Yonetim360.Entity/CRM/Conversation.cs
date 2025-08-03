@@ -16,7 +16,7 @@ namespace Yonetim360.Entity.CRM
         public string Subject  { get; set; }
         public DateTime StartDateTime { get; set; }       // → 29.07.2025 19:00
         public int DurationInMinutes { get; set; }
-        public ICollection<Representative> Representatives { get; set; } = new List<Representative>();
+        public virtual ICollection<Representative> Representatives { get; set; }
         public ConversationStatus? ConversationStatus  { get; set; }
     }
 

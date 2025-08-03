@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -17,6 +18,7 @@ namespace Yonetim360Business.CQRS.CRM.Conversations.Queries.GetConversations
         private readonly IRepository<Conversation> _conversationRepository;
         private readonly IMapper _mapper;
         private readonly IUnitOfWork _unitOfWork;
+
         public GetConversationQueryHandler(IMapper mapper, IUnitOfWork unitOfWork)
         {
             _mapper = mapper;
@@ -26,8 +28,14 @@ namespace Yonetim360Business.CQRS.CRM.Conversations.Queries.GetConversations
 
         public async Task<List<ConversationDto>> Handle(GetConversationQuery request, CancellationToken cancellationToken)
         {
-            var conversations = await _conversationRepository.GetAllAsync(null, false, request.PageSize, request.PageNumber)??
-                throw new InvalidDataException("Not found any conversation records");
+            var conversations = await _conversationRepository.GetAllAsync(
+                filter: null,
+                tracked: false,
+                pageSize: request.PageSize,
+                pageNumber: request.PageNumber,
+                include: q => q.Include(c => c.Representatives))
+                ?? throw new InvalidDataException("Not found any conversation records");
+
             return _mapper.Map<List<ConversationDto>>(conversations);
         }
     }

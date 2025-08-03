@@ -21,8 +21,8 @@ namespace Yonetim360Business.CQRS.CRM.Conversations.Commands.UpdateConversation
         public UpdateConversationCommandHandler(IMapper mapper, IUnitOfWork unitOfWork)
         {
             _mapper = mapper;
-            _conversationRepository = _unitOfWork.GetRepository<Conversation>();
             _unitOfWork = unitOfWork;
+            _conversationRepository = _unitOfWork.GetRepository<Conversation>();
             _userRepository = _unitOfWork.GetRepository<User>();
         }
 
@@ -31,8 +31,10 @@ namespace Yonetim360Business.CQRS.CRM.Conversations.Commands.UpdateConversation
             var user = await _userRepository.GetFirstOrDefaultAsync(x=>x.Id == request.ConversationDto.UserId) ??
                 throw new InvalidDataException("User not found");
 
-            var newConversation = _mapper.Map<Conversation>(request.ConversationDto);
-            await _conversationRepository.UpdateAsync(newConversation);
+            var updatedConversation = await _conversationRepository.GetFirstOrDefaultAsync(x => x.Id == request.ConversationDto.Id);
+
+           _mapper.Map(request.ConversationDto,updatedConversation);
+            await _unitOfWork.CommitAsync(cancellationToken);
             return true;
         }
     }

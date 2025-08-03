@@ -8,7 +8,7 @@ using Yonetim360Business.Mediator;
 
 namespace Yonetim360Business.CQRS.CRM.Conversations.Commands.CreateConversation
 {
-    public class CreateConversationCommand:ICommand<bool>
+    public class CreateConversationCommand : ICommand<bool>
     {
         public Guid UserId { get; set; }
         public Guid CustomerId { get; set; }
