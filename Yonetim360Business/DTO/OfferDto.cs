@@ -19,7 +19,7 @@ namespace Yonetim360Business.DTO
             public string ServiceExplanation { get; set; }
 
             #region Fiyatlandırma kısmı
-            public string Amount { get; set; }
+            public decimal Amount { get; set; }
             public decimal? DiscountValue { get; set; }
             public DiscountType? DiscountType { get; set; }
             public decimal? FinalAmount { get; set; }

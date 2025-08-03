@@ -32,8 +32,7 @@ namespace Yonetim360Business.CQRS.CRM.OfferAndSales.Commands.UpdateOffer
                  throw new InvalidDataException("Not found an user");
             var updatedOffer= await _offerRepository.GetFirstOrDefaultAsync(x => x.Id == request.OfferDto.Id);
 
-            var result = _mapper.Map<Offer>(updatedOffer);
-            await _offerRepository.UpdateAsync(result);
+            _mapper.Map(request.OfferDto, updatedOffer);
             await _unitOfWork.CommitAsync();
             return true;
         }

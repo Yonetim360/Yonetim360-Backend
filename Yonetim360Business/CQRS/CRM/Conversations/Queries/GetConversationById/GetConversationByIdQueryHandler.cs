@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -28,8 +29,9 @@ namespace Yonetim360Business.CQRS.CRM.Conversations.Queries.GetConversationById
 
         public async Task<ConversationDto> Handle(GetConversationByIdQuery request, CancellationToken cancellationToken)
         {
-            var conversation = await _conversationRepository.GetFirstOrDefaultAsync(x => x.Id == request.Id) ??
-                throw new InvalidDataException("Not found a conversation record");
+            var conversation = await _conversationRepository.GetFirstOrDefaultAsync(
+                filter: x => x.Id == request.Id,
+                include: q => q.Include(c => c.Representatives)) ?? throw new InvalidDataException("Not found a conversation record");
 
             return _mapper.Map<ConversationDto>(conversation);
 

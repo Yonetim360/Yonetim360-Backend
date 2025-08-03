@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.EntityFrameworkCore;
+using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
@@ -40,6 +41,11 @@ namespace Yonetim360.DataAccess.UnitOfWorks.Concrete
             var repo = new Repository<T>(_dbContext);
             _repositories[type] = repo;
             return repo;
+        }
+
+        public void SetEntityState<T>(T entity, EntityState state) where T : class
+        {
+            _dbContext.Entry(entity).State = state;
         }
     }
 }

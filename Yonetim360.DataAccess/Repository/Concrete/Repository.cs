@@ -43,15 +43,14 @@ namespace Yonetim360.DataAccess.Repository.Concrete
         #endregion
 
         #region ReadRepository
-        public async Task<IEnumerable<T>> GetAllAsync(Expression<Func<T, bool>>? filter, bool tracked = false, int pageSize = 100, int pageNumber = 1)
+        public async Task<IEnumerable<T>> GetAllAsync(
+            Expression<Func<T, bool>>? filter,
+            bool tracked = false,
+            int pageSize = 100,
+            int pageNumber = 1,
+            Func<IQueryable<T>, IIncludableQueryable<T, object>>? include = null)
         {
-            IQueryable<T> query = _dbSet;
-
-            if (!tracked)
-                query = query.AsNoTracking();
-
-            if (filter != null)
-                query = query.Where(filter);
+            var query = CreateQuery(filter, include, tracked);
 
             if (pageSize > 0)
             {

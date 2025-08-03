@@ -17,7 +17,7 @@ namespace Yonetim360Business.DTO
         public string Subject { get; set; }
         public DateTime StartDateTime { get; set; }
         public int DurationInMinutes { get; set; }
-        public List<Guid> RepresentativeIds { get; set; } = new();
+        public List<RepresentativeDto> Representatives { get; set; } = new();
         public ConversationStatus? ConversationStatus { get; set; }
     }
 }

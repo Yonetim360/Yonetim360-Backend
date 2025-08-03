@@ -11,7 +11,7 @@ namespace Yonetim360.DataAccess.Repository.Abstract
     public interface IRepository<T> where T : class
     {
         Task<T?> GetFirstOrDefaultAsync(Expression<Func<T, bool>> filter, bool tracked = true, Func<IQueryable<T>, IIncludableQueryable<T, object>>? include = null);
-        Task<IEnumerable<T>> GetAllAsync(Expression<Func<T, bool>>? filter,bool tracked=false, int pageSize = 100, int pageNumber = 1);
+        Task<IEnumerable<T>> GetAllAsync(Expression<Func<T, bool>>? filter = null,bool tracked = false,int pageSize = 100, int pageNumber = 1,Func<IQueryable<T>, IIncludableQueryable<T, object>>? include = null);
         Task CreateAsync(T entity);
         Task DeleteAsync(T entity);
         Task UpdateAsync(T entity);
