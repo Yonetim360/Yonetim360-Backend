@@ -28,6 +28,7 @@ namespace Yonetim360.DataAccess.Data
         public DbSet<Representative> Representatives { get; set; }
         public DbSet<Offer> Offers { get; set; }
         public DbSet<CustomerSupportRequest> CustomerSupportRequests { get; set; }
+        public DbSet<CrmTask> Tasks { get; set; }
 
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)

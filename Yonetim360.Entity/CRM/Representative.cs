@@ -18,6 +18,7 @@ namespace Yonetim360.Entity.CRM
         public string Notes { get; set; }
         public ICollection<Conversation> Conversations { get; set; }
         public ICollection<CustomerSupportRequest> CustomerSupportRequests { get; set; }
+        public ICollection<CrmTask> CrmTasks { get; set; }
 
     }
     public enum Department
