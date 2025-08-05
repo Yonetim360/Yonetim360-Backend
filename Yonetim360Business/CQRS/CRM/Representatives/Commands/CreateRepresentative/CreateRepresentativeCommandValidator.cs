@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Yonetim360Business.CQRS.CRM.Representatives.CreateRepresentative
+namespace Yonetim360Business.CQRS.CRM.Representatives.Commands.CreateRepresentative
 {
     public class CreateRepresentativeCommandValidator:AbstractValidator<CreateRepresentativeCommand>
     {

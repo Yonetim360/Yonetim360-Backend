@@ -8,6 +8,7 @@ namespace Yonetim360.Entity.CRM
 {
     public class Representative:BaseEntity,ITenantEntity
     {
+        public Guid UserId { get; set; }
         public Guid TenantId { get; set; }
         public string FirstName { get; set; }
         public string LastName { get; set; }
@@ -16,6 +17,7 @@ namespace Yonetim360.Entity.CRM
         public Department Department { get; set; }
         public string Notes { get; set; }
         public ICollection<Conversation> Conversations { get; set; }
+        public ICollection<CustomerSupportRequest> CustomerSupportRequests { get; set; }
 
     }
     public enum Department

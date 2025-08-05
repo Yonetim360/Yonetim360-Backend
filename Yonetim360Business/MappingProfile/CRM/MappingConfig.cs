@@ -8,8 +8,9 @@ using Yonetim360.Entity.CRM;
 using Yonetim360Business.CQRS.CRM.Conversations.Commands.CreateConversation;
 using Yonetim360Business.CQRS.CRM.Conversations.Commands.UpdateConversationStatus;
 using Yonetim360Business.CQRS.CRM.Customers.Commands.CreateCustomer;
+using Yonetim360Business.CQRS.CRM.CustomerSupportRequests.Commands.CreateCustomerSupportRequest;
 using Yonetim360Business.CQRS.CRM.OfferAndSales.Commands.CreateOffer;
-using Yonetim360Business.CQRS.CRM.Representatives.CreateRepresentative;
+using Yonetim360Business.CQRS.CRM.Representatives.Commands.CreateRepresentative;
 using Yonetim360Business.DTO;
 
 namespace Yonetim360Business.MappingProfile.CRM
@@ -27,6 +28,8 @@ namespace Yonetim360Business.MappingProfile.CRM
             CreateMap<CreateOfferCommand, Offer>().ReverseMap();
             CreateMap<CreateRepresentativeCommand, Representative>().ReverseMap();
             CreateMap<RepresentativeDto,Representative>().ReverseMap();
+            CreateMap<CreateCustomerSupportRequestCommand,CustomerSupportRequest>().ReverseMap();
+            CreateMap<CustomerSupportRequestDto,CustomerSupportRequest>().ReverseMap();
 
         }
     }

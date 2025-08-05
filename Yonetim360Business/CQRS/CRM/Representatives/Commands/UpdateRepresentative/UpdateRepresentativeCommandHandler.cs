@@ -10,7 +10,7 @@ using Yonetim360.Entity;
 using Yonetim360.Entity.CRM;
 using Yonetim360Business.Mediator;
 
-namespace Yonetim360Business.CQRS.CRM.Representatives.UpdateRepresentative
+namespace Yonetim360Business.CQRS.CRM.Representatives.Commands.UpdateRepresentative
 {
     public class UpdateRepresentativeCommandHandler : ICommandHandler<UpdateRepresentativeCommand, bool>
     {

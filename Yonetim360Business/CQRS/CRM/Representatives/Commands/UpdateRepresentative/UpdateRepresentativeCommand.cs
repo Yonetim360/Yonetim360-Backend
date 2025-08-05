@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using Yonetim360Business.DTO;
 using Yonetim360Business.Mediator;
 
-namespace Yonetim360Business.CQRS.CRM.Representatives.UpdateRepresentative
+namespace Yonetim360Business.CQRS.CRM.Representatives.Commands.UpdateRepresentative
 {
     public class UpdateRepresentativeCommand:ICommand<bool>
     {
