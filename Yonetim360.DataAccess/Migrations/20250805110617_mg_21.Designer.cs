@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Yonetim360.DataAccess.Data;
 
@@ -11,9 +12,11 @@ using Yonetim360.DataAccess.Data;
 namespace Yonetim360.DataAccess.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250805110617_mg_21")]
+    partial class mg_21
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -524,7 +527,7 @@ namespace Yonetim360.DataAccess.Migrations
             modelBuilder.Entity("Yonetim360.Entity.CRM.CrmTask", b =>
                 {
                     b.HasOne("Yonetim360.Entity.CRM.Representative", "Representative")
-                        .WithMany("CrmTasks")
+                        .WithMany()
                         .HasForeignKey("RepresentativeId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -560,11 +563,6 @@ namespace Yonetim360.DataAccess.Migrations
                     b.Navigation("Customer");
 
                     b.Navigation("Representative");
-                });
-
-            modelBuilder.Entity("Yonetim360.Entity.CRM.Representative", b =>
-                {
-                    b.Navigation("CrmTasks");
                 });
 #pragma warning restore 612, 618
         }

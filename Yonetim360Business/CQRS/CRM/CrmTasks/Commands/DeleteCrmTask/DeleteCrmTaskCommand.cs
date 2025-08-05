@@ -1,0 +1,15 @@
+﻿using Microsoft.AspNetCore.Mvc;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using Yonetim360Business.Mediator;
+
+namespace Yonetim360Business.CQRS.CRM.CrmTasks.Commands.DeleteCrmTask
+{
+    public class DeleteCrmTaskCommand:ICommand<bool>
+    {
+        public Guid Id { get; set; }
+    }
+}
