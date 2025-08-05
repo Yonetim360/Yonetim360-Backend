@@ -8,6 +8,7 @@ namespace Yonetim360.Entity.CRM
 {
     public class Conversation : BaseEntity, ITenantEntity
     {
+        public Guid UserId { get; set; }
         public Guid TenantId { get; set; }
         public Customer? Customer { get; set; }
         public Guid CustomerId { get; set; }

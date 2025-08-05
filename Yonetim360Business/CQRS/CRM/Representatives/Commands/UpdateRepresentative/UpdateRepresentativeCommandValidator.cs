@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Yonetim360Business.CQRS.CRM.Representatives.UpdateRepresentative
+namespace Yonetim360Business.CQRS.CRM.Representatives.Commands.UpdateRepresentative
 {
     public class UpdateRepresentativeCommandValidator:AbstractValidator<UpdateRepresentativeCommand>
     {

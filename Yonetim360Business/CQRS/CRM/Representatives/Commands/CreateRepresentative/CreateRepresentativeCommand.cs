@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using Yonetim360.Entity.CRM;
 using Yonetim360Business.Mediator;
 
-namespace Yonetim360Business.CQRS.CRM.Representatives.CreateRepresentative
+namespace Yonetim360Business.CQRS.CRM.Representatives.Commands.CreateRepresentative
 {
     public class CreateRepresentativeCommand:ICommand<bool>
     {

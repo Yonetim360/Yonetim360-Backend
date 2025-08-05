@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Yonetim360Business.CQRS.CRM.Representatives.DeleteRepresentative
+namespace Yonetim360Business.CQRS.CRM.Representatives.Commands.DeleteRepresentative
 {
     public class DeleteRepresentativeCommandValidator:AbstractValidator<DeleteRepresentativeCommand>
     {

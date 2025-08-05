@@ -9,6 +9,7 @@ namespace Yonetim360Business.DTO
 {
     public class CustomerDto
     {
+        public Guid UserId { get; set; }
         public Guid Id { get; set; }
         public string CompanyName { get; set; }
         public string ContactPerson { get; set; }

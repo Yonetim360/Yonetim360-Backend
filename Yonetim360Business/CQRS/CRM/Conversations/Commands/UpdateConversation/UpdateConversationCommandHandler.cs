@@ -34,7 +34,7 @@ namespace Yonetim360Business.CQRS.CRM.Conversations.Commands.UpdateConversation
             var updatedConversation = await _conversationRepository.GetFirstOrDefaultAsync(x => x.Id == request.ConversationDto.Id);
 
            _mapper.Map(request.ConversationDto,updatedConversation);
-            await _unitOfWork.CommitAsync(cancellationToken);
+            await _unitOfWork.CommitAsync();
             return true;
         }
     }

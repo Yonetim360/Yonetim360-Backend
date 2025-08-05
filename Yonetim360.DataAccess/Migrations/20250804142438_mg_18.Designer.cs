@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Yonetim360.DataAccess.Data;
 
@@ -11,9 +12,11 @@ using Yonetim360.DataAccess.Data;
 namespace Yonetim360.DataAccess.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250804142438_mg_18")]
+    partial class mg_18
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -35,21 +38,6 @@ namespace Yonetim360.DataAccess.Migrations
                     b.HasIndex("RepresentativesId");
 
                     b.ToTable("ConversationRepresentative");
-                });
-
-            modelBuilder.Entity("CustomerSupportRequestRepresentative", b =>
-                {
-                    b.Property<Guid>("CustomerSupportRequestsId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid>("RepresentativesId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.HasKey("CustomerSupportRequestsId", "RepresentativesId");
-
-                    b.HasIndex("RepresentativesId");
-
-                    b.ToTable("CustomerSupportRequestRepresentative");
                 });
 
             modelBuilder.Entity("Yonetim360.Entity.CRM.Conversation", b =>
@@ -96,9 +84,6 @@ namespace Yonetim360.DataAccess.Migrations
                         .HasColumnType("datetime2");
 
                     b.Property<Guid?>("UpdatedBy")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid>("UserId")
                         .HasColumnType("uniqueidentifier");
 
                     b.HasKey("Id");
@@ -162,9 +147,6 @@ namespace Yonetim360.DataAccess.Migrations
                     b.Property<Guid?>("UpdatedBy")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid>("UserId")
-                        .HasColumnType("uniqueidentifier");
-
                     b.HasKey("Id");
 
                     b.ToTable("Customers");
@@ -206,9 +188,6 @@ namespace Yonetim360.DataAccess.Migrations
                         .HasColumnType("datetime2");
 
                     b.Property<Guid?>("UpdatedBy")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid>("UserId")
                         .HasColumnType("uniqueidentifier");
 
                     b.HasKey("Id");
@@ -306,6 +285,9 @@ namespace Yonetim360.DataAccess.Migrations
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("datetime2");
 
+                    b.Property<Guid?>("CustomerSupportRequestId")
+                        .HasColumnType("uniqueidentifier");
+
                     b.Property<Guid?>("DeletedBy")
                         .HasColumnType("uniqueidentifier");
 
@@ -344,10 +326,9 @@ namespace Yonetim360.DataAccess.Migrations
                     b.Property<Guid?>("UpdatedBy")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid>("UserId")
-                        .HasColumnType("uniqueidentifier");
-
                     b.HasKey("Id");
+
+                    b.HasIndex("CustomerSupportRequestId");
 
                     b.ToTable("Representatives");
                 });
@@ -378,9 +359,6 @@ namespace Yonetim360.DataAccess.Migrations
                         .HasColumnType("datetime2");
 
                     b.Property<Guid?>("UpdatedBy")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid>("UserId")
                         .HasColumnType("uniqueidentifier");
 
                     b.HasKey("Id");
@@ -444,21 +422,6 @@ namespace Yonetim360.DataAccess.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("CustomerSupportRequestRepresentative", b =>
-                {
-                    b.HasOne("Yonetim360.Entity.CRM.CustomerSupportRequest", null)
-                        .WithMany()
-                        .HasForeignKey("CustomerSupportRequestsId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Yonetim360.Entity.CRM.Representative", null)
-                        .WithMany()
-                        .HasForeignKey("RepresentativesId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
             modelBuilder.Entity("Yonetim360.Entity.CRM.Conversation", b =>
                 {
                     b.HasOne("Yonetim360.Entity.CRM.Customer", "Customer")
@@ -498,6 +461,18 @@ namespace Yonetim360.DataAccess.Migrations
                     b.Navigation("Customer");
 
                     b.Navigation("Representative");
+                });
+
+            modelBuilder.Entity("Yonetim360.Entity.CRM.Representative", b =>
+                {
+                    b.HasOne("Yonetim360.Entity.CRM.CustomerSupportRequest", null)
+                        .WithMany("Representatives")
+                        .HasForeignKey("CustomerSupportRequestId");
+                });
+
+            modelBuilder.Entity("Yonetim360.Entity.CRM.CustomerSupportRequest", b =>
+                {
+                    b.Navigation("Representatives");
                 });
 #pragma warning restore 612, 618
         }
