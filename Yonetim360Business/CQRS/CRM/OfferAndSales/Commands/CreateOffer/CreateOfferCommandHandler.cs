@@ -8,11 +8,12 @@ using Yonetim360.DataAccess.Repository.Abstract;
 using Yonetim360.DataAccess.UnitOfWorks.Abstract;
 using Yonetim360.Entity;
 using Yonetim360.Entity.CRM;
+using Yonetim360Business.DTO;
 using Yonetim360Business.Mediator;
 
 namespace Yonetim360Business.CQRS.CRM.OfferAndSales.Commands.CreateOffer
 {
-    public class CreateOfferCommandHandler : ICommandHandler<CreateOfferCommand, bool>
+    public class CreateOfferCommandHandler : ICommandHandler<CreateOfferCommand, OfferDto>
     {
         private readonly IRepository<Offer> _offerRepository;
         private readonly IUnitOfWork _unitOfWork;
@@ -26,7 +27,7 @@ namespace Yonetim360Business.CQRS.CRM.OfferAndSales.Commands.CreateOffer
             _userRepository = _unitOfWork.GetRepository<User>();
         }
 
-        public async Task<bool> Handle(CreateOfferCommand request, CancellationToken cancellationToken)
+        public async Task<OfferDto> Handle(CreateOfferCommand request, CancellationToken cancellationToken)
         {
             var user = await _userRepository.GetFirstOrDefaultAsync(x => x.Id == request.UserId) ??
                 throw new InvalidDataException("Not found an user");
@@ -48,7 +49,8 @@ namespace Yonetim360Business.CQRS.CRM.OfferAndSales.Commands.CreateOffer
 
             await _offerRepository.CreateAsync(offer);
             await _unitOfWork.CommitAsync();
-            return true;
+            var offerDto = _mapper.Map<OfferDto>(offer) ?? throw new InvalidDataException("Offer could not be created");
+            return offerDto;
         }
     }
 }

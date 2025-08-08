@@ -9,11 +9,12 @@ using Yonetim360.DataAccess.Repository.Abstract;
 using Yonetim360.DataAccess.UnitOfWorks.Abstract;
 using Yonetim360.Entity;
 using Yonetim360.Entity.CRM;
+using Yonetim360Business.DTO;
 using Yonetim360Business.Mediator;
 
 namespace Yonetim360Business.CQRS.CRM.Conversations.Commands.CreateConversation
 {
-    public class CreateConversationCommandHandler : ICommandHandler<CreateConversationCommand, bool>
+    public class CreateConversationCommandHandler : ICommandHandler<CreateConversationCommand, ConversationDto>
     {
         private readonly IUnitOfWork _unitOfWork;
         private readonly IRepository<Conversation> _conversationRepository;
@@ -29,7 +30,7 @@ namespace Yonetim360Business.CQRS.CRM.Conversations.Commands.CreateConversation
             _representativeRepository = _unitOfWork.GetRepository<Representative>();
         }
 
-        public async Task<bool> Handle(CreateConversationCommand request, CancellationToken cancellationToken)
+        public async Task<ConversationDto> Handle(CreateConversationCommand request, CancellationToken cancellationToken)
         {
             var user = await _userRepository.GetFirstOrDefaultAsync(x => x.Id == request.UserId) ??
                 throw new InvalidDataException("User not found");
@@ -55,7 +56,8 @@ namespace Yonetim360Business.CQRS.CRM.Conversations.Commands.CreateConversation
 
             await _conversationRepository.CreateAsync(conversation);
             await _unitOfWork.CommitAsync();
-            return true;
+            var conversationDto = _mapper.Map<ConversationDto>(conversation);
+            return conversationDto;
         }
     }
 }

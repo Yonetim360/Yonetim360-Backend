@@ -28,7 +28,7 @@ namespace Yonetim360.API
             }
 
             app.UseHttpsRedirection();
-
+            app.UseMiddleware<Yonetim360.API.Middlewares.TenantMiddleware>();
             app.UseAuthorization();
 
 

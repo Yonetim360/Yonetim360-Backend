@@ -4,11 +4,12 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Yonetim360.Entity.CRM;
+using Yonetim360Business.DTO;
 using Yonetim360Business.Mediator;
 
 namespace Yonetim360Business.CQRS.CRM.OfferAndSales.Commands.CreateOffer
 {
-    public class CreateOfferCommand:ICommand<bool>
+    public class CreateOfferCommand:ICommand<OfferDto>
     {
         public Guid UserId { get; set; }
         public string Title { get; set; }

@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
@@ -30,29 +31,50 @@ namespace Yonetim360.DataAccess.Data
         public DbSet<CustomerSupportRequest> CustomerSupportRequests { get; set; }
         public DbSet<CrmTask> Tasks { get; set; }
 
-
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
 
+            // Soft delete filter
             modelBuilder.ApplySoftDeleteFilter();
 
+            // Tenant filters - DİNAMİK OLARAK
+            ApplyTenantFilters(modelBuilder);
+        }
 
-            // Tüm tenant entity'ler için otomatik filter
+        private void ApplyTenantFilters(ModelBuilder modelBuilder)
+        {
             foreach (var entityType in modelBuilder.Model.GetEntityTypes())
             {
                 if (typeof(ITenantEntity).IsAssignableFrom(entityType.ClrType))
                 {
-                    var method = typeof(ApplicationDbContext)
-                        .GetMethod(nameof(SetTenantFilter), BindingFlags.NonPublic | BindingFlags.Static)
-                        .MakeGenericMethod(entityType.ClrType);
+                    // Expression dinamik oluştur
+                    var parameter = Expression.Parameter(entityType.ClrType, "e");
+                    var tenantIdProperty = Expression.Property(parameter, nameof(ITenantEntity.TenantId));
+                    var tenantIdConstant = Expression.Constant(null, typeof(Guid?));
 
-                    method.Invoke(null, new object[] { modelBuilder, _tenantProvider });
+                    // Runtime'da değerlendirilecek expression
+                    var currentTenantMethod = typeof(ApplicationDbContext)
+                        .GetMethod(nameof(GetCurrentTenantId), BindingFlags.NonPublic | BindingFlags.Instance);
+                    var currentTenantCall = Expression.Call(Expression.Constant(this), currentTenantMethod);
+
+                    var equalExpression = Expression.Equal(tenantIdProperty, currentTenantCall);
+                    var lambdaExpression = Expression.Lambda(equalExpression, parameter);
+
+                    modelBuilder.Entity(entityType.ClrType).HasQueryFilter(lambdaExpression);
                 }
             }
         }
-        public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken)
+
+        private Guid GetCurrentTenantId()
         {
+            // runtimeda çağrılır
+            return _tenantProvider.TenantId;
+        }
+
+        public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
+        {
+            // Tenant ID kontrolü ve ataması
             foreach (var entry in ChangeTracker.Entries<ITenantEntity>())
             {
                 if (entry.State == EntityState.Added)
@@ -61,9 +83,12 @@ namespace Yonetim360.DataAccess.Data
                 }
                 else if (entry.State == EntityState.Modified)
                 {
+                    // Tenant ID değiştirilmesin
                     entry.Property(x => x.TenantId).IsModified = false;
                 }
             }
+
+            // Soft delete işlemleri
             foreach (var entry in ChangeTracker.Entries<BaseEntity>())
             {
                 switch (entry.State)
@@ -78,13 +103,8 @@ namespace Yonetim360.DataAccess.Data
                         break;
                 }
             }
-            return await base.SaveChangesAsync(cancellationToken);
-        }
 
-        private static void SetTenantFilter<TEntity>(ModelBuilder modelBuilder, ITenantProvider tenantProvider)
-            where TEntity : class, ITenantEntity
-        {
-            modelBuilder.Entity<TEntity>().HasQueryFilter(e => e.TenantId == tenantProvider.TenantId);
+            return await base.SaveChangesAsync(cancellationToken);
         }
     }
 }

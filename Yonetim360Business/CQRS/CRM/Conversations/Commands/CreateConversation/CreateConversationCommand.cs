@@ -4,11 +4,12 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Yonetim360.Entity.CRM;
+using Yonetim360Business.DTO;
 using Yonetim360Business.Mediator;
 
 namespace Yonetim360Business.CQRS.CRM.Conversations.Commands.CreateConversation
 {
-    public class CreateConversationCommand : ICommand<bool>
+    public class CreateConversationCommand : ICommand<ConversationDto>
     {
         public Guid UserId { get; set; }
         public Guid CustomerId { get; set; }

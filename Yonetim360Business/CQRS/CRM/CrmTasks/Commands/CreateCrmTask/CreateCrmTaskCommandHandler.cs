@@ -9,11 +9,12 @@ using Yonetim360.DataAccess.Repository.Abstract;
 using Yonetim360.DataAccess.UnitOfWorks.Abstract;
 using Yonetim360.Entity;
 using Yonetim360.Entity.CRM;
+using Yonetim360Business.DTO;
 using Yonetim360Business.Mediator;
 
 namespace Yonetim360Business.CQRS.CRM.CrmTasks.Commands.CreateCrmTask
 {
-    public class CreateCrmTaskCommandHandler : ICommandHandler<CreateCrmTaskCommand, bool>
+    public class CreateCrmTaskCommandHandler : ICommandHandler<CreateCrmTaskCommand, CrmTaskDto>
     {
         private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
@@ -27,7 +28,7 @@ namespace Yonetim360Business.CQRS.CRM.CrmTasks.Commands.CreateCrmTask
             _userRepository = _unitOfWork.GetRepository<User>();
         }
 
-        public async Task<bool> Handle(CreateCrmTaskCommand request, CancellationToken cancellationToken)
+        public async Task<CrmTaskDto> Handle(CreateCrmTaskCommand request, CancellationToken cancellationToken)
         {
             var user = await _userRepository.GetFirstOrDefaultAsync(x => x.Id == request.UserId) ??
                 throw new InvalidDataException("User not found");
@@ -35,7 +36,9 @@ namespace Yonetim360Business.CQRS.CRM.CrmTasks.Commands.CreateCrmTask
             var newCrmTask = _mapper.Map<CrmTask>(request) ?? throw new InvalidDataException("Mapping failed");
             await _repository.CreateAsync(newCrmTask);
             await _unitOfWork.CommitAsync();
-            return true;
+
+            var crmTaskDto = _mapper.Map<CrmTaskDto>(newCrmTask) ?? throw new InvalidDataException("Mapping to DTO failed");
+            return crmTaskDto;
 
         }
     }

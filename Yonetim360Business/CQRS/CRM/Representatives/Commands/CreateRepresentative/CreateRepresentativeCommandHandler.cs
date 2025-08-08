@@ -8,11 +8,12 @@ using Yonetim360.DataAccess.Repository.Abstract;
 using Yonetim360.DataAccess.UnitOfWorks.Abstract;
 using Yonetim360.Entity;
 using Yonetim360.Entity.CRM;
+using Yonetim360Business.DTO;
 using Yonetim360Business.Mediator;
 
 namespace Yonetim360Business.CQRS.CRM.Representatives.Commands.CreateRepresentative
 {
-    public class CreateRepresentativeCommandHandler : ICommandHandler<CreateRepresentativeCommand, bool>
+    public class CreateRepresentativeCommandHandler : ICommandHandler<CreateRepresentativeCommand, RepresentativeDto>
     {
         private readonly IRepository<Representative> _representativeRepository;
         private readonly IUnitOfWork _unitOfWork;
@@ -26,7 +27,7 @@ namespace Yonetim360Business.CQRS.CRM.Representatives.Commands.CreateRepresentat
             _userRepository = _unitOfWork.GetRepository<User>();
         }
 
-        public async Task<bool> Handle(CreateRepresentativeCommand request, CancellationToken cancellationToken)
+        public async Task<RepresentativeDto> Handle(CreateRepresentativeCommand request, CancellationToken cancellationToken)
         {
            var user = await _userRepository.GetFirstOrDefaultAsync(x=>x.Id==request.UserId)??
                 throw new InvalidDataException("User not found");
@@ -34,7 +35,10 @@ namespace Yonetim360Business.CQRS.CRM.Representatives.Commands.CreateRepresentat
             var representative = _mapper.Map<Representative>(request);
             await _representativeRepository.CreateAsync(representative);
             await _unitOfWork.CommitAsync();
-            return true;
+
+            var representativeDto = _mapper.Map<RepresentativeDto>(representative) ??
+                throw new InvalidDataException("Representative could not be created");
+            return representativeDto;
         }
     }
 }
