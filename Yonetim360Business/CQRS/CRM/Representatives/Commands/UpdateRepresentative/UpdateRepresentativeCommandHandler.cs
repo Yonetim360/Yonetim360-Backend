@@ -31,10 +31,11 @@ namespace Yonetim360Business.CQRS.CRM.Representatives.Commands.UpdateRepresentat
            var UpdatedUser = await _userRepository.GetFirstOrDefaultAsync(x=>x.Id==request.RepresentativeDto.UserId)??
                 throw new Exception("User not found");
 
-            var updatedRepresentative = _mapper.Map<Representative>(request.RepresentativeDto);
-            updatedRepresentative.UpdatedBy = UpdatedUser.Id;
+            var updatedRepresentative = await _representativeRepository.GetFirstOrDefaultAsync(x => x.Id == request.RepresentativeDto.Id) ??
+                throw new Exception("Representative not found");
 
-            await _representativeRepository.UpdateAsync(updatedRepresentative);
+            _mapper.Map(request.RepresentativeDto,updatedRepresentative);
+
             await _unitOfWork.CommitAsync();
             return true;    
 
