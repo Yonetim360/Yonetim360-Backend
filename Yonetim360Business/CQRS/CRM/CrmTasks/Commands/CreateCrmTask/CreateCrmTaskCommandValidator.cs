@@ -12,7 +12,7 @@ namespace Yonetim360Business.CQRS.CRM.CrmTasks.Commands.CreateCrmTask
         public CreateCrmTaskCommandValidator()
         {
             RuleFor(x=>x.UserId)
-                .NotEmpty().WithMessage("User ID cannot be empty.");
+                .NotEmpty().WithMessage("ID cannot be empty.");
             RuleFor(x => x.Title).NotEmpty()
                 .WithMessage("Task title cannot be empty.")
                 .MaximumLength(100).WithMessage("Task title cannot exceed 100 characters.");

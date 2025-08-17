@@ -27,7 +27,7 @@ namespace Yonetim360.API.Controllers.CRM.Controller
             return Ok(result);
         }
 
-        [HttpDelete]
+        [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(Guid id)
         {
             var command = new DeleteOfferCommand { Id = id };

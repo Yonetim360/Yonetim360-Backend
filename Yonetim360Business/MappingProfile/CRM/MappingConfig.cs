@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using Yonetim360.Entity.CRM;
 using Yonetim360Business.CQRS.CRM.Conversations.Commands.CreateConversation;
 using Yonetim360Business.CQRS.CRM.Conversations.Commands.UpdateConversationStatus;
+using Yonetim360Business.CQRS.CRM.CrmSolutionCenters.Commands.CreateSolutionRequest;
 using Yonetim360Business.CQRS.CRM.CrmTasks.Commands.CreateCrmTask;
 using Yonetim360Business.CQRS.CRM.Customers.Commands.CreateCustomer;
 using Yonetim360Business.CQRS.CRM.CustomerSupportRequests.Commands.CreateCustomerSupportRequest;
@@ -33,6 +34,8 @@ namespace Yonetim360Business.MappingProfile.CRM
             CreateMap<CustomerSupportRequestDto,CustomerSupportRequest>().ReverseMap();
             CreateMap<CreateCrmTaskCommand, CrmTask>().ReverseMap();
             CreateMap<CrmTaskDto, CrmTask>().ReverseMap();
+            CreateMap<CrmSolutionRequestDto, CrmSolutionRequest>().ReverseMap();
+            CreateMap<CreateCrmSolutionRequestCommand, CrmSolutionRequest>().ReverseMap();
 
         }
     }

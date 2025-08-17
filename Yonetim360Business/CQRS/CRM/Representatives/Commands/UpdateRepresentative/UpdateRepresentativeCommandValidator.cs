@@ -30,8 +30,8 @@ namespace Yonetim360Business.CQRS.CRM.Representatives.Commands.UpdateRepresentat
             RuleFor(x => x.RepresentativeDto.Notes)
                 .MaximumLength(300).WithMessage("Notes cannot exceed 300 characters.");
             RuleFor(x => x.RepresentativeDto.UserId).NotNull()
-                .WithMessage("User ID is required.")
-                .Must(x => x != Guid.Empty).WithMessage("User ID cannot be empty.");
+                .WithMessage("ApplicationUser ID is required.")
+                .Must(x => x != Guid.Empty).WithMessage("ApplicationUser ID cannot be empty.");
         }
     }
 }

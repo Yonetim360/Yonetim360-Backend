@@ -25,7 +25,7 @@ namespace Yonetim360.API.Controllers.CRM.Controller
             var result = await Mediator.Send(command);
             return Ok(result);
         }
-        [HttpDelete]
+        [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(Guid id)
         {
             var command = new DeleteConversationCommand { Id = id };

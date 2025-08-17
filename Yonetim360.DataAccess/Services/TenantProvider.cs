@@ -21,38 +21,29 @@ namespace Yonetim360.DataAccess.Services
         {
             get
             {
-                var context = _httpContextAccessor.HttpContext;
-                if (context == null)
-                    throw new InvalidOperationException("HttpContext is not available");
+                var user = _httpContextAccessor.HttpContext?.User;
+                if (user == null)
+                    throw new InvalidOperationException("HttpContext veya kullanıcı bulunamadı");
 
-                // Header'dan tenant ID al
-                var header = context.Request.Headers["X-Tenant-ID"].FirstOrDefault();
-
-                if (string.IsNullOrEmpty(header))
-                    throw new UnauthorizedAccessException("Tenant ID is required");
-
-                if (!Guid.TryParse(header, out var tenantId) || tenantId == Guid.Empty)
-                    throw new UnauthorizedAccessException("Invalid Tenant ID format");
+                var tenantClaim = user.FindFirst("TenantId")?.Value;
+                if (string.IsNullOrEmpty(tenantClaim) || !Guid.TryParse(tenantClaim, out var tenantId))
+                    throw new UnauthorizedAccessException("Tenant ID geçersiz");
 
                 return tenantId;
             }
         }
 
-        //  exception fırlatmaz uygulama çökmez
         public bool TryGetTenantId(out Guid tenantId)
         {
             tenantId = Guid.Empty;
+            var user = _httpContextAccessor.HttpContext?.User;
+            if (user == null) return false;
 
-            var context = _httpContextAccessor.HttpContext;
-            if (context == null) return false;
-
-            var header = context.Request.Headers["X-Tenant-ID"].FirstOrDefault();
-            if (string.IsNullOrEmpty(header)) return false;
-
-            return Guid.TryParse(header, out tenantId) && tenantId != Guid.Empty;
+            var tenantClaim = user.FindFirst("TenantId")?.Value;
+            return tenantClaim != null && Guid.TryParse(tenantClaim, out tenantId);
         }
     }
-}
+    }
 
 //TenantProvider, HTTP isteklerinde header'dan tenant ID'yi okuyup,
 //bu ID'yi kullanılabilir hale getiren bir  servis sınıfıdır.

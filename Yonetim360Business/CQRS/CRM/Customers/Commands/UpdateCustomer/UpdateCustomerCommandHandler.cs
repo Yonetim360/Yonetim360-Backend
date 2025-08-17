@@ -17,19 +17,19 @@ namespace Yonetim360Business.CQRS.CRM.Customers.Commands.UpdateCustomer
         private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
         private readonly IRepository<Customer> _customerRepository;
-        private readonly IRepository<User> _userRepository;
+        private readonly IRepository<ApplicationUser> _userRepository;
         public UpdateCustomerCommandHandler(IUnitOfWork unitOfWork, IMapper mapper)
         {
             _unitOfWork = unitOfWork;
             _mapper = mapper;
             _customerRepository = _unitOfWork.GetRepository<Customer>();
-            _userRepository = _unitOfWork.GetRepository<User>();
+            _userRepository = _unitOfWork.GetRepository<ApplicationUser>();
         }
 
         public async Task<bool> Handle(UpdateCustomerCommand request, CancellationToken cancellationToken)
         {
-            var user = await _userRepository.GetFirstOrDefaultAsync(x => x.Id == request.CustomerDto.UserId) ??
-                throw new InvalidDataException("User not found");
+            var ApplicationUser = await _userRepository.GetFirstOrDefaultAsync(x => x.Id == request.CustomerDto.UserId) ??
+                throw new InvalidDataException("ApplicationUser not found");
             var UpdatedCustomer = await _customerRepository.GetFirstOrDefaultAsync(x => x.Id == request.CustomerDto.Id);
              _mapper.Map(request.CustomerDto, UpdatedCustomer);
             await _unitOfWork.CommitAsync();

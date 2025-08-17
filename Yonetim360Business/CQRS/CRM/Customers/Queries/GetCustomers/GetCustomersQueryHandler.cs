@@ -28,7 +28,7 @@ namespace Yonetim360Business.CQRS.CRM.Customers.Queries.GetCustomers
         {
             var customerList= await _customerRepository.GetAllAsync(null,false,request.PageSize,request.PageNumber)
                 ?? throw new ArgumentException("No customer found. Please make a valid request");
-            var result = _mapper.Map<List<CustomerDto>>(customerList.ToList());
+            var result = _mapper.Map<List<CustomerDto>>(customerList);
             return result;
         }
     }

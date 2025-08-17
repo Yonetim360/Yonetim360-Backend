@@ -11,6 +11,7 @@ namespace Yonetim360.Entity
         public Guid UserId { get; set; }
         public string Name { get; set; }
         public Guid TenantId { get; set; }
+        public string? TwilioNumber { get; set; }
 
     }
 }

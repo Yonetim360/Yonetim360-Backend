@@ -15,14 +15,14 @@ namespace Yonetim360Business.CQRS.CRM.Representatives.Commands.DeleteRepresentat
     public class DeleteRepresentativeCommandHandler : ICommandHandler<DeleteRepresentativeCommand, bool>
     {
         private readonly IRepository<Representative> _representativeRepository;
-        private readonly IRepository<User> _userRepository;
+        private readonly IRepository<ApplicationUser> _userRepository;
         private readonly IMapper _mapper;
         private readonly IUnitOfWork _unitOfWork;
         public DeleteRepresentativeCommandHandler(IMapper mapper, IUnitOfWork unitOfWork)
         {
             _mapper = mapper;
             _unitOfWork = unitOfWork;
-            _userRepository=_unitOfWork.GetRepository<User>();
+            _userRepository=_unitOfWork.GetRepository<ApplicationUser>();
             _representativeRepository = _unitOfWork.GetRepository<Representative>();
         }
 

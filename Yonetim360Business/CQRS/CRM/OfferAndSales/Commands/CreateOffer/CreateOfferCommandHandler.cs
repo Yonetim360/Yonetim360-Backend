@@ -18,19 +18,19 @@ namespace Yonetim360Business.CQRS.CRM.OfferAndSales.Commands.CreateOffer
         private readonly IRepository<Offer> _offerRepository;
         private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
-        private readonly IRepository<User> _userRepository;
+        private readonly IRepository<ApplicationUser> _userRepository;
         public CreateOfferCommandHandler(IUnitOfWork unitOfWork, IMapper mapper)
         {
             _unitOfWork = unitOfWork;
             _mapper = mapper;
             _offerRepository = _unitOfWork.GetRepository<Offer>();
-            _userRepository = _unitOfWork.GetRepository<User>();
+            _userRepository = _unitOfWork.GetRepository<ApplicationUser>();
         }
 
         public async Task<OfferDto> Handle(CreateOfferCommand request, CancellationToken cancellationToken)
         {
-            var user = await _userRepository.GetFirstOrDefaultAsync(x => x.Id == request.UserId) ??
-                throw new InvalidDataException("Not found an user");
+            var ApplicationUser = await _userRepository.GetFirstOrDefaultAsync(x => x.Id == request.UserId) ??
+                throw new InvalidDataException("Not found an ApplicationUser");
             var offer = _mapper.Map<Offer>(request);
 
             switch (request.DiscountType)

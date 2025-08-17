@@ -17,19 +17,19 @@ namespace Yonetim360Business.CQRS.CRM.OfferAndSales.Commands.UpdateOffer
         private readonly IRepository<Offer> _offerRepository;
         private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
-        private readonly IRepository<User> _userRepository;
+        private readonly IRepository<ApplicationUser> _userRepository;
         public UpdateOfferCommandHandler(IUnitOfWork unitOfWork, IMapper mapper)
         {
             _unitOfWork = unitOfWork;
             _mapper = mapper;
             _offerRepository = _unitOfWork.GetRepository<Offer>();
-            _userRepository = _unitOfWork.GetRepository<User>();
+            _userRepository = _unitOfWork.GetRepository<ApplicationUser>();
         }
 
         public async Task<bool> Handle(UpdateOfferCommand request, CancellationToken cancellationToken)
         {
-            var user = await _userRepository.GetFirstOrDefaultAsync(x => x.Id == request.OfferDto.UserId) ??
-                 throw new InvalidDataException("Not found an user");
+            var ApplicationUser = await _userRepository.GetFirstOrDefaultAsync(x => x.Id == request.OfferDto.UserId) ??
+                 throw new InvalidDataException("Not found an ApplicationUser");
             var updatedOffer= await _offerRepository.GetFirstOrDefaultAsync(x => x.Id == request.OfferDto.Id);
 
             _mapper.Map(request.OfferDto, updatedOffer);
