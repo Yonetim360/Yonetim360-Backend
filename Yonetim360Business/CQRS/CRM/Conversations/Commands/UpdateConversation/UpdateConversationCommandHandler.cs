@@ -16,20 +16,20 @@ namespace Yonetim360Business.CQRS.CRM.Conversations.Commands.UpdateConversation
     {
         private readonly IMapper _mapper;
         private readonly IRepository<Conversation> _conversationRepository;
-        private readonly IRepository<User> _userRepository;
+        private readonly IRepository<ApplicationUser> _userRepository;
         private readonly IUnitOfWork _unitOfWork;
         public UpdateConversationCommandHandler(IMapper mapper, IUnitOfWork unitOfWork)
         {
             _mapper = mapper;
             _unitOfWork = unitOfWork;
             _conversationRepository = _unitOfWork.GetRepository<Conversation>();
-            _userRepository = _unitOfWork.GetRepository<User>();
+            _userRepository = _unitOfWork.GetRepository<ApplicationUser>();
         }
 
         public async Task<bool> Handle(UpdateConversationCommand request, CancellationToken cancellationToken)
         {
-            var user = await _userRepository.GetFirstOrDefaultAsync(x=>x.Id == request.ConversationDto.UserId) ??
-                throw new InvalidDataException("User not found");
+            var ApplicationUser = await _userRepository.GetFirstOrDefaultAsync(x=>x.Id == request.ConversationDto.UserId) ??
+                throw new InvalidDataException("ApplicationUser not found");
 
             var updatedConversation = await _conversationRepository.GetFirstOrDefaultAsync(x => x.Id == request.ConversationDto.Id);
 

@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,7 +14,7 @@ using Yonetim360.Entity.CRM;
 
 namespace Yonetim360.DataAccess.Data
 {
-    public class ApplicationDbContext : DbContext
+    public class ApplicationDbContext : IdentityDbContext<ApplicationUser, ApplicationRole, Guid>
     {
         private readonly ITenantProvider _tenantProvider;
 
@@ -25,43 +26,71 @@ namespace Yonetim360.DataAccess.Data
 
         public DbSet<Company> Companies { get; set; }
         public DbSet<Customer> Customers { get; set; }
-        public DbSet<User> Users { get; set; }
         public DbSet<Representative> Representatives { get; set; }
         public DbSet<Offer> Offers { get; set; }
         public DbSet<CustomerSupportRequest> CustomerSupportRequests { get; set; }
         public DbSet<CrmTask> Tasks { get; set; }
+        public DbSet<CrmSolutionRequest> CrmSolutionRequests { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
 
-            // Soft delete filter
-            modelBuilder.ApplySoftDeleteFilter();
-
-            // Tenant filters - DİNAMİK OLARAK
-            ApplyTenantFilters(modelBuilder);
+            // Soft delete ve tenant filtreleri birlikte uygula
+            ApplyCombinedFilters(modelBuilder);
         }
 
-        private void ApplyTenantFilters(ModelBuilder modelBuilder)
+        private void ApplyCombinedFilters(ModelBuilder modelBuilder)
         {
             foreach (var entityType in modelBuilder.Model.GetEntityTypes())
             {
-                if (typeof(ITenantEntity).IsAssignableFrom(entityType.ClrType))
-                {
-                    // Expression dinamik oluştur
-                    var parameter = Expression.Parameter(entityType.ClrType, "e");
-                    var tenantIdProperty = Expression.Property(parameter, nameof(ITenantEntity.TenantId));
-                    var tenantIdConstant = Expression.Constant(null, typeof(Guid?));
+                var clrType = entityType.ClrType;
 
-                    // Runtime'da değerlendirilecek expression
+                // BaseEntity'den miras alan ve ITenantEntity implement eden tipler için
+                if (typeof(BaseEntity).IsAssignableFrom(clrType) && typeof(ITenantEntity).IsAssignableFrom(clrType))
+                {
+                    // Her iki filtreyi birleştir
+                    var parameter = Expression.Parameter(clrType, "e");
+
+                    // Soft delete filter: !e.IsDeleted
+                    var isDeletedProperty = Expression.Property(parameter, nameof(BaseEntity.IsDeleted));
+                    var softDeleteFilter = Expression.Not(isDeletedProperty);
+
+                    // Tenant filter: e.TenantId == GetCurrentTenantId()
+                    var tenantIdProperty = Expression.Property(parameter, nameof(ITenantEntity.TenantId));
                     var currentTenantMethod = typeof(ApplicationDbContext)
                         .GetMethod(nameof(GetCurrentTenantId), BindingFlags.NonPublic | BindingFlags.Instance);
                     var currentTenantCall = Expression.Call(Expression.Constant(this), currentTenantMethod);
+                    var tenantFilter = Expression.Equal(tenantIdProperty, currentTenantCall);
 
-                    var equalExpression = Expression.Equal(tenantIdProperty, currentTenantCall);
-                    var lambdaExpression = Expression.Lambda(equalExpression, parameter);
+                    // İki filtreyi AND ile birleştir
+                    var combinedFilter = Expression.AndAlso(softDeleteFilter, tenantFilter);
+                    var lambdaExpression = Expression.Lambda(combinedFilter, parameter);
 
-                    modelBuilder.Entity(entityType.ClrType).HasQueryFilter(lambdaExpression);
+                    entityType.SetQueryFilter(lambdaExpression);
+                }
+                // Sadece BaseEntity'den miras alan tipler için (tenant olmayan)
+                else if (typeof(BaseEntity).IsAssignableFrom(clrType))
+                {
+                    var parameter = Expression.Parameter(clrType, "e");
+                    var isDeletedProperty = Expression.Property(parameter, nameof(BaseEntity.IsDeleted));
+                    var softDeleteFilter = Expression.Not(isDeletedProperty);
+                    var lambdaExpression = Expression.Lambda(softDeleteFilter, parameter);
+
+                    entityType.SetQueryFilter(lambdaExpression);
+                }
+                // Sadece ITenantEntity implement eden tipler için (BaseEntity olmayan)
+                else if (typeof(ITenantEntity).IsAssignableFrom(clrType))
+                {
+                    var parameter = Expression.Parameter(clrType, "e");
+                    var tenantIdProperty = Expression.Property(parameter, nameof(ITenantEntity.TenantId));
+                    var currentTenantMethod = typeof(ApplicationDbContext)
+                        .GetMethod(nameof(GetCurrentTenantId), BindingFlags.NonPublic | BindingFlags.Instance);
+                    var currentTenantCall = Expression.Call(Expression.Constant(this), currentTenantMethod);
+                    var tenantFilter = Expression.Equal(tenantIdProperty, currentTenantCall);
+                    var lambdaExpression = Expression.Lambda(tenantFilter, parameter);
+
+                    entityType.SetQueryFilter(lambdaExpression);
                 }
             }
         }

@@ -18,19 +18,19 @@ namespace Yonetim360Business.CQRS.CRM.Representatives.Commands.CreateRepresentat
         private readonly IRepository<Representative> _representativeRepository;
         private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
-        private readonly IRepository<User> _userRepository;
+        private readonly IRepository<ApplicationUser> _userRepository;
         public CreateRepresentativeCommandHandler(IUnitOfWork unitOfWork, IMapper mapper)
         {
             _unitOfWork = unitOfWork;
             _mapper = mapper;
             _representativeRepository = _unitOfWork.GetRepository<Representative>();
-            _userRepository = _unitOfWork.GetRepository<User>();
+            _userRepository = _unitOfWork.GetRepository<ApplicationUser>();
         }
 
         public async Task<RepresentativeDto> Handle(CreateRepresentativeCommand request, CancellationToken cancellationToken)
         {
-           var user = await _userRepository.GetFirstOrDefaultAsync(x=>x.Id==request.UserId)??
-                throw new InvalidDataException("User not found");
+           var ApplicationUser = await _userRepository.GetFirstOrDefaultAsync(x=>x.Id==request.UserId)??
+                throw new InvalidDataException("ApplicationUser not found");
 
             var representative = _mapper.Map<Representative>(request);
             await _representativeRepository.CreateAsync(representative);

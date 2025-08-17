@@ -15,18 +15,18 @@ namespace Yonetim360Business.CQRS.CRM.OfferAndSales.Commands.DeleteOffer
     {
         private readonly IRepository<Offer> _offerRepository;
         private readonly IUnitOfWork _unitOfWork;
-        private readonly IRepository<User> _userRepository;
+        private readonly IRepository<ApplicationUser> _userRepository;
         public DeleteOfferCommandHandler(IUnitOfWork unitOfWork)
         {
             _unitOfWork = unitOfWork;
             _offerRepository=_unitOfWork.GetRepository<Offer>();
-            _userRepository = _unitOfWork.GetRepository<User>();
+            _userRepository = _unitOfWork.GetRepository<ApplicationUser>();
         }
 
         public async Task<bool> Handle(DeleteOfferCommand request, CancellationToken cancellationToken)
         {
-            var user = await _userRepository.GetFirstOrDefaultAsync(x => x.Id == request.UserId) ??
-                 throw new InvalidDataException("User is not invalid");
+            var ApplicationUser = await _userRepository.GetFirstOrDefaultAsync(x => x.Id == request.UserId) ??
+                 throw new InvalidDataException("ApplicationUser is not invalid");
 
             var deletedOffer = await _offerRepository.GetFirstOrDefaultAsync(x => x.Id == request.Id) ??
                 throw new InvalidDataException("Offer is not invalid");

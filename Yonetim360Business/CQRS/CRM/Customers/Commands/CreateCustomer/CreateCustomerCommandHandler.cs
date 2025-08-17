@@ -18,7 +18,7 @@ namespace Yonetim360Business.CQRS.CRM.Customers.Commands.CreateCustomer
     {
        private readonly IUnitOfWork _unitOfWork;
         private readonly IRepository<Customer> _customerRepository;
-        private readonly IRepository<User> _userRepository;
+        private readonly IRepository<ApplicationUser> _userRepository;
         private readonly IMapper _mapper;
 
         public CreateCustomerCommandHandler(IUnitOfWork unitOfWork, IMapper mapper)
@@ -26,13 +26,13 @@ namespace Yonetim360Business.CQRS.CRM.Customers.Commands.CreateCustomer
             _unitOfWork = unitOfWork;
             _mapper = mapper;
             _customerRepository = _unitOfWork.GetRepository<Customer>();
-            _userRepository = _unitOfWork.GetRepository<User>();
+            _userRepository = _unitOfWork.GetRepository<ApplicationUser>();
         }
 
         public async Task<CustomerDto> Handle(CreateCustomerCommand request, CancellationToken cancellationToken)
         {
-            var user = await _userRepository.GetFirstOrDefaultAsync(x=>x.Id==request.UserId)??
-                throw new InvalidDataException("User not found");
+            var ApplicationUser = await _userRepository.GetFirstOrDefaultAsync(x=>x.Id==request.UserId)??
+                throw new InvalidDataException("ApplicationUser not found");
             
             var newCustomer =  _mapper.Map<Customer>(request) ?? throw new InvalidDataException("Mapping failed");
             await _customerRepository.CreateAsync(newCustomer);

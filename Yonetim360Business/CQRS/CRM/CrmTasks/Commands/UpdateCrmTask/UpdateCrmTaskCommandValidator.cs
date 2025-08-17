@@ -15,7 +15,7 @@ namespace Yonetim360Business.CQRS.CRM.CrmTasks.Commands.UpdateCrmTask
                 .NotEmpty().WithMessage("Task ID cannot be empty.")
                 .NotNull().WithMessage("Task ID cannot be null.");
             RuleFor(x => x.CrmTaskDto.UserId)
-                .NotEmpty().WithMessage("User ID cannot be empty.");
+                .NotEmpty().WithMessage("ApplicationUser ID cannot be empty.");
             RuleFor(x => x.CrmTaskDto.Title).NotEmpty()
                 .WithMessage("Task title cannot be empty.")
                 .MaximumLength(100).WithMessage("Task title cannot exceed 100 characters.");

@@ -25,8 +25,8 @@ namespace Yonetim360Business.CQRS.CRM.Conversations.Commands.DeleteConversation
 
         public async Task<bool> Handle(DeleteConversationCommand request, CancellationToken cancellationToken)
         {
-           var user = await _repository.GetFirstOrDefaultAsync(x=>x.Id== request.Id)?? throw new Exception("Conversation not found");
-            await _repository.DeleteAsync(user);
+           var conversation = await _repository.GetFirstOrDefaultAsync(x=>x.Id== request.Id)?? throw new Exception("Conversation not found");
+            await _repository.DeleteAsync(conversation);
             await _unitOfWork.CommitAsync();
             return true;
         }

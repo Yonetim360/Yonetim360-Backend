@@ -15,7 +15,7 @@ namespace Yonetim360Business.CQRS.CRM.Representatives.Commands.UpdateRepresentat
     public class UpdateRepresentativeCommandHandler : ICommandHandler<UpdateRepresentativeCommand, bool>
     {
         private readonly IRepository<Representative> _representativeRepository;
-        private readonly IRepository<User> _userRepository;
+        private readonly IRepository<ApplicationUser> _userRepository;
         private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
         public UpdateRepresentativeCommandHandler(IUnitOfWork unitOfWork, IMapper mapper)
@@ -23,13 +23,13 @@ namespace Yonetim360Business.CQRS.CRM.Representatives.Commands.UpdateRepresentat
             _unitOfWork = unitOfWork;
             _mapper = mapper;
             _representativeRepository = _unitOfWork.GetRepository<Representative>();
-            _userRepository = _unitOfWork.GetRepository<User>();
+            _userRepository = _unitOfWork.GetRepository<ApplicationUser>();
         }
 
         public async Task<bool> Handle(UpdateRepresentativeCommand request, CancellationToken cancellationToken)
         {
            var UpdatedUser = await _userRepository.GetFirstOrDefaultAsync(x=>x.Id==request.RepresentativeDto.UserId)??
-                throw new Exception("User not found");
+                throw new Exception("ApplicationUser not found");
 
             var updatedRepresentative = await _representativeRepository.GetFirstOrDefaultAsync(x => x.Id == request.RepresentativeDto.Id) ??
                 throw new Exception("Representative not found");

@@ -26,6 +26,7 @@ namespace Yonetim360.DataAccess.Extensions
             });
 
             services.AddScoped<IUnitOfWork, UnitOfWork>();
+            services.AddSingleton<ITenantContextAccessor, TenantContextAccessor>();
             return services;
         }
     }
