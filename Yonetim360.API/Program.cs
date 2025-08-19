@@ -9,6 +9,7 @@ using Yonetim360.Entity;
 using Yonetim360.DataAccess.Extensions;
 using Yonetim360Business.ServiceRegistration;
 using Yonetim360.DataAccess.Services;
+using Yonetim360.API.Middlewares;
 
 namespace Yonetim360.API
 {
@@ -34,11 +35,10 @@ namespace Yonetim360.API
             .AddEntityFrameworkStores<ApplicationDbContext>()
             .AddDefaultTokenProviders();
 
-            // HttpContextAccessor (TenantProvider için)
-            builder.Services.AddHttpContextAccessor();
-            builder.Services.AddScoped<ITenantProvider, TenantProvider>();
+            //// HttpContextAccessor (TenantProvider için)
+            //builder.Services.AddHttpContextAccessor();
+            //builder.Services.AddScoped<ITenantProvider, TenantProvider>();
 
-            // Diðer servisler
             builder.Services.AddDataAccessServices(builder.Configuration);
             builder.Services.AddBusinessLayer();
 
@@ -98,6 +98,7 @@ namespace Yonetim360.API
             app.UseCors("myclients");
             app.UseHttpsRedirection();
             app.UseAuthentication();
+            app.UseMiddleware<TokenBlacklistMiddleware>();
             app.UseAuthorization();
 
             app.MapControllers();
