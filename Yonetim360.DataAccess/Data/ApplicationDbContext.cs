@@ -31,6 +31,7 @@ namespace Yonetim360.DataAccess.Data
         public DbSet<CustomerSupportRequest> CustomerSupportRequests { get; set; }
         public DbSet<CrmTask> Tasks { get; set; }
         public DbSet<CrmSolutionRequest> CrmSolutionRequests { get; set; }
+        public DbSet<TokenBlacklist> TokenBlacklists { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
