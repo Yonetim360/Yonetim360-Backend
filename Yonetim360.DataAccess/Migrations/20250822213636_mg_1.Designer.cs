@@ -12,8 +12,8 @@ using Yonetim360.DataAccess.Data;
 namespace Yonetim360.DataAccess.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20250819123400_mg_2")]
-    partial class mg_2
+    [Migration("20250822213636_mg_1")]
+    partial class mg_1
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -725,11 +725,9 @@ namespace Yonetim360.DataAccess.Migrations
 
             modelBuilder.Entity("Yonetim360.Entity.TokenBlacklist", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<DateTime>("Expiration")
                         .HasColumnType("datetime2");

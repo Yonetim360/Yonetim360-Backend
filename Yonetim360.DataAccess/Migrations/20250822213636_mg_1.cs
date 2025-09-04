@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace Yonetim360.DataAccess.Migrations
 {
     /// <inheritdoc />
-    public partial class mg_first : Migration
+    public partial class mg_1 : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -150,6 +150,19 @@ namespace Yonetim360.DataAccess.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Representatives", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "TokenBlacklists",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    Token = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Expiration = table.Column<DateTime>(type: "datetime2", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_TokenBlacklists", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -547,6 +560,9 @@ namespace Yonetim360.DataAccess.Migrations
 
             migrationBuilder.DropTable(
                 name: "Tasks");
+
+            migrationBuilder.DropTable(
+                name: "TokenBlacklists");
 
             migrationBuilder.DropTable(
                 name: "AspNetRoles");
