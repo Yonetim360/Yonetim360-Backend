@@ -11,7 +11,7 @@ using Yonetim360Business.Mediator;
 
 namespace Yonetim360Business.CQRS.CommonModule.Announcements.Commands.CreateAnnouncement
 {
-    public class CreateAnnouncementCommandHandler : ICommandHandler<CreateAnnouncementCommand, bool>
+    public class CreateAnnouncementCommandHandler : ICommandHandler<CreateAnnouncementCommand, Guid>
     {
         private readonly IRepository<Announcement> _announcementRepositoory;
         private readonly IUnitOfWork _unitOfWork;
@@ -25,7 +25,7 @@ namespace Yonetim360Business.CQRS.CommonModule.Announcements.Commands.CreateAnno
             _userRepository = _unitOfWork.GetRepository<ApplicationUser>();
         }
 
-        public async Task<bool> Handle(CreateAnnouncementCommand request, CancellationToken cancellationToken)
+        public async Task<Guid> Handle(CreateAnnouncementCommand request, CancellationToken cancellationToken)
         {
             var user = await _userRepository.GetFirstOrDefaultAsync(x => x.Id == request.UserId) ??
                 throw new InvalidDataException("Not invalid user ");
@@ -33,7 +33,7 @@ namespace Yonetim360Business.CQRS.CommonModule.Announcements.Commands.CreateAnno
             var announcement = _mapper.Map<Announcement>(request);
             await _announcementRepositoory.CreateAsync(announcement);
             await _unitOfWork.CommitAsync();
-            return true;
+            return announcement.Id;
         }
     }
 }
