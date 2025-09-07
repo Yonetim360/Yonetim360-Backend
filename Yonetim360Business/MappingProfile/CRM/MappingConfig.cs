@@ -4,9 +4,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Yonetim360.Entity;
 using Yonetim360.Entity.CRM;
+using Yonetim360Business.CQRS.CommonModule.Announcements.Commands.CreateAnnouncement;
 using Yonetim360Business.CQRS.CRM.Conversations.Commands.CreateConversation;
 using Yonetim360Business.CQRS.CRM.Conversations.Commands.UpdateConversationStatus;
+using Yonetim360Business.CQRS.CRM.CrmAnnouncements.Commands.AssignAnnouncementToRepresentatives;
 using Yonetim360Business.CQRS.CRM.CrmSolutionCenters.Commands.CreateSolutionRequest;
 using Yonetim360Business.CQRS.CRM.CrmTasks.Commands.CreateCrmTask;
 using Yonetim360Business.CQRS.CRM.Customers.Commands.CreateCustomer;
@@ -36,6 +39,10 @@ namespace Yonetim360Business.MappingProfile.CRM
             CreateMap<CrmTaskDto, CrmTask>().ReverseMap();
             CreateMap<CrmSolutionRequestDto, CrmSolutionRequest>().ReverseMap();
             CreateMap<CreateCrmSolutionRequestCommand, CrmSolutionRequest>().ReverseMap();
+            CreateMap<CreateAnnouncementCommand,Announcement>().ReverseMap();
+            CreateMap<AssignAnnouncementToRepresentativeCommand,AnnouncementRepresentative>().ReverseMap();
+            CreateMap<AnnouncementDto, Announcement>().ReverseMap();
+
 
         }
     }

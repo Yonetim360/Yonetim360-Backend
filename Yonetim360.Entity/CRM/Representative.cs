@@ -14,14 +14,14 @@ namespace Yonetim360.Entity.CRM
         public string LastName { get; set; }
         public string Email { get; set; }
         public string PhoneNumber { get; set; }
-        public Department Department { get; set; }
+        public CrmDepartment CrmDepartment { get; set; }
         public string Notes { get; set; }
         public ICollection<Conversation> Conversations { get; set; }
         public ICollection<CustomerSupportRequest> CustomerSupportRequests { get; set; }
         public ICollection<CrmTask> CrmTasks { get; set; }
 
     }
-    public enum Department
+    public enum CrmDepartment
     {
         Sales,
         Support,

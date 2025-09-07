@@ -27,7 +27,7 @@ namespace Yonetim360Business.CQRS.Profiles.Queries.GetCurrentProfile
 
         public async Task<CurrentUserDto> Handle(GetCurrentProfileQuery request, CancellationToken cancellationToken)
         {
-            var userId = _httpContextAccessor.HttpContext.User.FindFirstValue(JwtRegisteredClaimNames.Sub);
+            var userId =  _httpContextAccessor.HttpContext.User.FindFirstValue(ClaimTypes.NameIdentifier);
             if (userId == null)
                 throw new UnauthorizedAccessException("Kullanıcı bulunamadı");
 
@@ -40,7 +40,7 @@ namespace Yonetim360Business.CQRS.Profiles.Queries.GetCurrentProfile
                 Id = user.Id,
                 FullName = user.FirstName + " " + user.LastName,
                 Email = user.Email,
-                TenantId = user.TenantId
+
             };
         }
     }

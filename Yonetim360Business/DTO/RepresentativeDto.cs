@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Yonetim360.Entity.CRM;
+using Yonetim360.Entity.İK;
 
 namespace Yonetim360Business.DTO
 {
