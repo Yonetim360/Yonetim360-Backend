@@ -11,6 +11,6 @@ namespace Yonetim360Business.DTO
         public Guid Id { get; set; }
         public string FullName { get; set; }
         public string Email { get; set; }
-        public Guid TenantId { get; set; }
+
     }
 }

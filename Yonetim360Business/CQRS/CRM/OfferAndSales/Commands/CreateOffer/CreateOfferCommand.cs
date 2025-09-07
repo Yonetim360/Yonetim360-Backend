@@ -22,6 +22,7 @@ namespace Yonetim360Business.CQRS.CRM.OfferAndSales.Commands.CreateOffer
         public decimal Amount { get; set; }
         public decimal DiscountValue { get; set; }
         public DiscountType DiscountType { get; set; }
+        public TaxIncluded? TaxIncluded { get; set; }
         #endregion 
         public DateTime ValidityDate { get; set; }
         public string Note { get; set; }

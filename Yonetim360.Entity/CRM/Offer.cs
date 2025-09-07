@@ -23,6 +23,7 @@ namespace Yonetim360.Entity.CRM
         public decimal? DiscountValue { get; set; }
         public DiscountType? DiscountType { get; set; }
         public decimal? FinalAmount { get; set; }
+        public TaxIncluded? TaxIncluded { get; set; }
         #endregion
 
         public DateTime ValidityDate { get; set; }
@@ -40,6 +41,11 @@ namespace Yonetim360.Entity.CRM
         Accepted = 2,
         Signed=3,
         Rejected = 4
+    }
+    public enum TaxIncluded
+    {
+        Yes = 1,
+        No = 2
     }
     public enum Currency
     {

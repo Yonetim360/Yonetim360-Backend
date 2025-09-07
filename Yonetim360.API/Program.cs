@@ -85,6 +85,7 @@ namespace Yonetim360.API
             ));
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
+            builder.Services.AddSignalR();
 
             var app = builder.Build();
 
@@ -101,6 +102,8 @@ namespace Yonetim360.API
             app.UseMiddleware<TokenBlacklistMiddleware>();
             app.UseAuthorization();
 
+
+            app.MapHub<Yonetim360Business.SignalR.AnnouncementHub>("/notificationHub");
             app.MapControllers();
             app.Run();
         }
