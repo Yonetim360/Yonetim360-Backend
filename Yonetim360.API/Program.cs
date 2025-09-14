@@ -41,7 +41,12 @@ namespace Yonetim360.API
 
             builder.Services.AddDataAccessServices(builder.Configuration);
             builder.Services.AddBusinessLayer();
-
+            builder.Services.AddSignalR(options =>
+            {
+                options.EnableDetailedErrors = true; // Development için
+                options.KeepAliveInterval = TimeSpan.FromSeconds(15);
+                options.ClientTimeoutInterval = TimeSpan.FromSeconds(30);
+            });
             // JWT Authentication
             var jwtSection = builder.Configuration.GetSection("Jwt");
             var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtSection["Key"]!));
@@ -82,6 +87,7 @@ namespace Yonetim360.API
                 builder.WithOrigins("http://localhost:3000", "https://localhost:3000")
                        .AllowAnyMethod()
                        .AllowAnyHeader()
+                       .AllowCredentials()
             ));
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();

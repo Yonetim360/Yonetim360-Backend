@@ -11,6 +11,7 @@ using Yonetim360Business.Behaviors;
 using Yonetim360Business.CQRS.CRM.Customers.Commands.CreateCustomer;
 using Yonetim360Business.CQRS.Users.CreateUser;
 using Yonetim360Business.MappingProfile.CRM;
+using Yonetim360Business.SignalR.Services;
 
 namespace Yonetim360Business.ServiceRegistration
 {
@@ -22,6 +23,7 @@ namespace Yonetim360Business.ServiceRegistration
             services.AddTransient(typeof(IPipelineBehavior<,>), typeof(ValidationBehavior<,>));
             services.AddValidatorsFromAssemblyContaining<CreateCustomerCommand>();
             services.AddAutoMapper(typeof(MappingConfig));
+            services.AddScoped<IAnnouncementHubService, AnnouncementHubService>();
 
             return services;
 
