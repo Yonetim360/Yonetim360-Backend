@@ -8,7 +8,7 @@ using Yonetim360Business.Mediator;
 
 namespace Yonetim360Business.CQRS.CommonModule.Announcements.Commands.CreateAnnouncement
 {
-    public class CreateAnnouncementCommand:ICommand<bool>
+    public class CreateAnnouncementCommand:ICommand<Guid>
     {
         public string Title { get; set; }
         public string Content { get; set; }

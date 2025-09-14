@@ -9,6 +9,7 @@ using Yonetim360.DataAccess.UnitOfWorks.Abstract;
 using Yonetim360.Entity;
 using Yonetim360.Entity.CRM;
 using Yonetim360Business.Mediator;
+using Yonetim360Business.SignalR.Services;
 
 namespace Yonetim360Business.CQRS.CRM.CrmAnnouncements.Commands.AssignAnnouncementToRepresentatives
 {
@@ -20,7 +21,8 @@ namespace Yonetim360Business.CQRS.CRM.CrmAnnouncements.Commands.AssignAnnounceme
         private readonly IRepository<AnnouncementRepresentative> _announcementRepresentativeRepository;
         private readonly IRepository<Representative> _representativeRepository;
         private readonly IRepository<ApplicationUser> _userRepository;
-        public AssignAnnouncementToRepresentativeCommandHandler(IUnitOfWork unitOfWork, IMapper mapper)
+        private readonly IAnnouncementHubService _announcementHubService;
+        public AssignAnnouncementToRepresentativeCommandHandler(IUnitOfWork unitOfWork, IMapper mapper, IAnnouncementHubService announcementHubService)
         {
             _unitOfWork = unitOfWork;
             _mapper = mapper;
@@ -28,6 +30,7 @@ namespace Yonetim360Business.CQRS.CRM.CrmAnnouncements.Commands.AssignAnnounceme
             _announcementRepresentativeRepository = _unitOfWork.GetRepository<AnnouncementRepresentative>();
             _representativeRepository = _unitOfWork.GetRepository<Representative>();
             _userRepository = _unitOfWork.GetRepository<ApplicationUser>();
+            _announcementHubService = announcementHubService;
         }
 
         public async Task<bool> Handle(AssignAnnouncementToRepresentativeCommand request, CancellationToken cancellationToken)
@@ -67,6 +70,36 @@ namespace Yonetim360Business.CQRS.CRM.CrmAnnouncements.Commands.AssignAnnounceme
 
             }
             await _unitOfWork.CommitAsync(cancellationToken);
+
+            try
+            {
+                // SignalR bildirimi için announcement verilerini hazırlayın
+                var announcementData = new
+                {
+                    Id = announcement.Id,
+                    Title = announcement.Title,
+                    Content = announcement.Content,
+                    CreatedDate = announcement.CreatedAt,
+                    CreatedBy = announcement.UserId,
+                    AssignedDate = request.AssignedDate,
+                    AssignedBy = user.UserName ?? user.Email ?? user.Id.ToString(),
+                    TenantId = announcement.TenantId,
+                    RepresentativeCount = request.RepresentativeIds.Count
+                };
+
+                // SignalR ile representative'lere bildirim gönderin - Direkt GUID listesi
+                await _announcementHubService.NotifyPersonelAssigned(request.RepresentativeIds, announcementData);
+            }
+            catch (Exception ex)
+            {
+                // SignalR hatası business logic'i etkilememeli
+                // İsterseniz burada logging yapabilirsiniz
+                // _logger?.LogError(ex, "SignalR notification failed for announcement {AnnouncementId}", request.AnnouncementId);
+
+                // SignalR hatası olsa bile işlem başarılı sayılır
+                // Bu yüzden exception fırlatmıyoruz
+            }
+
             return true;
         }
     }
