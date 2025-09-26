@@ -19,6 +19,7 @@ namespace Yonetim360.Entity.CRM
         public int DurationInMinutes { get; set; }
         public virtual ICollection<Representative> Representatives { get; set; }
         public ConversationStatus? ConversationStatus  { get; set; }
+        public MeetingType? MeetingType { get; set; }
     }
 
     public enum ConversationType
@@ -29,10 +30,20 @@ namespace Yonetim360.Entity.CRM
         Chat = 4,
         Other = 5
     }
+    public enum MeetingType
+    {
+        Meet = 1,
+        Zoom = 2,
+        Teams = 3,
+        Other=4
+    }
+
     public enum ConversationStatus
     {
         Completed = 1,   
         Cancelled = 2,   
-        NoShow = 3 //görüşmeye gelinmedi
+        NoShow = 3,//görüşmeye gelinmedi
+        Planned=4,
+
     }
 }

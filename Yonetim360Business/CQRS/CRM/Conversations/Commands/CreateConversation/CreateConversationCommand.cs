@@ -14,6 +14,7 @@ namespace Yonetim360Business.CQRS.CRM.Conversations.Commands.CreateConversation
         public Guid UserId { get; set; }
         public Guid CustomerId { get; set; }
         public ConversationType? ConversationType { get; set; }
+        public MeetingType? MeetingType { get; set; }
         public string? ConversationInformation { get; set; }
         public string Subject { get; set; }
         public DateTime StartDateTime { get; set; }

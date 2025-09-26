@@ -33,7 +33,10 @@ namespace Yonetim360Business.CQRS.CRM.Conversations.Queries.GetConversations
                 tracked: false,
                 pageSize: request.PageSize,
                 pageNumber: request.PageNumber,
-                include: q => q.Include(c => c.Representatives))
+                include: q => q
+                .Include(c => c.Representatives)
+                .Include(c => c.Customer))
+                             
                 ?? throw new InvalidDataException("Not found any conversation records");
 
             return _mapper.Map<List<ConversationDto>>(conversations);

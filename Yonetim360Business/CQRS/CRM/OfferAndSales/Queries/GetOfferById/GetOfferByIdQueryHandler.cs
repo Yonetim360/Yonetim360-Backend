@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -26,7 +27,13 @@ namespace Yonetim360Business.CQRS.CRM.OfferAndSales.Queries.GetOfferById
 
         public async Task<OfferDto> Handle(GetOfferByIdQuery request, CancellationToken cancellationToken)
         {
-            var offer = await _offerRepository.GetFirstOrDefaultAsync(x=>x.Id==request.Id)??
+            var offer = await _offerRepository.GetFirstOrDefaultAsync(
+                filter:x=>x.Id==request.Id,
+                tracked:false,
+                include:i=>i
+                .Include(c=>c.Customer)
+                .Include(c=>c.Representative)
+                ) ??
                 throw new Exception("Teklif bulunamadı.");
             return _mapper.Map<OfferDto>(offer);
         }

@@ -31,7 +31,9 @@ namespace Yonetim360Business.CQRS.CRM.Conversations.Queries.GetConversationById
         {
             var conversation = await _conversationRepository.GetFirstOrDefaultAsync(
                 filter: x => x.Id == request.Id,
-                include: q => q.Include(c => c.Representatives)) ?? throw new InvalidDataException("Not found a conversation record");
+                include: q => q
+                .Include(c => c.Representatives)
+                .Include(c=>c.Customer)) ?? throw new InvalidDataException("Not found a conversation record");
 
             return _mapper.Map<ConversationDto>(conversation);
 
