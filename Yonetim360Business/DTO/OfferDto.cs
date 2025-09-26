@@ -14,7 +14,9 @@ namespace Yonetim360Business.DTO
              public Guid UserId { get; set; }
             public string Title { get; set; }
             public Guid RepresentativeId { get; set; }
+            public RepresentativeDto Representative { get; set; }
             public Guid CustomerId { get; set; }
+            public CustomerDto Customer { get; set; }
             public OfferStatus OfferStatus { get; set; }
             public string ServiceExplanation { get; set; }
 
