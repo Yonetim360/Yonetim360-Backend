@@ -1,11 +1,13 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Yonetim360.Entity.CRM;
 using Yonetim360Business.CQRS.CRM.Conversations.Commands.CreateConversation;
 using Yonetim360Business.CQRS.CRM.Conversations.Commands.DeleteConversation;
 using Yonetim360Business.CQRS.CRM.Conversations.Commands.UpdateConversation;
 using Yonetim360Business.CQRS.CRM.Conversations.Commands.UpdateConversationStatus;
 using Yonetim360Business.CQRS.CRM.Conversations.Queries.GetConversationById;
 using Yonetim360Business.CQRS.CRM.Conversations.Queries.GetConversations;
+using static Microsoft.EntityFrameworkCore.DbLoggerCategory.Database;
 
 namespace Yonetim360.API.Controllers.CRM.Controller
 {
@@ -33,18 +35,20 @@ namespace Yonetim360.API.Controllers.CRM.Controller
             return Ok(result);
         }
 
-        [HttpPost("{id}/status")]
-        public async Task<IActionResult> ChangeStatus(Guid id,UpdateConversationStatusCommand command)
+        [HttpPatch("{id}/status")]
+        public async Task<IActionResult> ChangeStatus(Guid id, UpdateConversationStatusCommand request)
         {
-            command.ConversationId = id;
-            var result = await Mediator.Send(command);
+
+
+            request.ConversationId = id;
+            var result = await Mediator.Send(request);
             return Ok(result);
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetAll(int PageSize=50,int PageNumber=1)
+        public async Task<IActionResult> GetAll([FromQuery] Guid? CustomerId, ConversationStatus? conversationStatus, int PageSize=50,int PageNumber=1)
         {
-           var result = await Mediator.Send( new GetConversationQuery { PageSize=PageSize, PageNumber = PageNumber });
+           var result = await Mediator.Send( new GetConversationQuery {CustomerId=CustomerId,ConversationStatus=conversationStatus,PageSize=PageSize, PageNumber = PageNumber });
             return Ok(result);
         }
 
