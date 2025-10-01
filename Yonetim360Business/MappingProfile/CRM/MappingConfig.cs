@@ -27,9 +27,13 @@ namespace Yonetim360Business.MappingProfile.CRM
             CreateMap<CreateCustomerCommand, Customer>().ReverseMap();
             CreateMap<CustomerDto, Customer>().ReverseMap();
             CreateMap<CreateConversationCommand, Conversation>().ReverseMap();
-            CreateMap<ConversationDto, Conversation>().ReverseMap();
+            CreateMap<Conversation, ConversationDto>()
+           .ForMember(dest => dest.CustomerCompanyName,
+               opt => opt.MapFrom(src => src.Customer.CompanyName));
             CreateMap<UpdateConversationStatusCommand, Conversation>().ReverseMap();
-            CreateMap<OfferDto,Offer>().ReverseMap();
+            CreateMap<Offer,OfferDto>()
+                .ForMember(dest=>dest.CustomerCompanyName,opt=>opt.MapFrom(src=>src.Customer.CompanyName))
+                .ForMember(dest=>dest.RepresentativeName,opt=>opt.MapFrom(src=>src.Representative.FirstName + " " + src.Representative.LastName));
             CreateMap<CreateOfferCommand, Offer>().ReverseMap();
             CreateMap<CreateRepresentativeCommand, Representative>().ReverseMap();
             CreateMap<RepresentativeDto,Representative>().ReverseMap();

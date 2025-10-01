@@ -12,7 +12,7 @@ namespace Yonetim360Business.DTO
         public Guid Id { get; set; }
         public Guid UserId { get; set; }
         public Guid CustomerId { get; set; }
-        public CustomerDto Customer { get; set; }
+        public string? CustomerCompanyName { get; set; }
         public ConversationType? ConversationType { get; set; }
         public MeetingType? MeetingType { get; set; }
         public string? ConversationInformation { get; set; }

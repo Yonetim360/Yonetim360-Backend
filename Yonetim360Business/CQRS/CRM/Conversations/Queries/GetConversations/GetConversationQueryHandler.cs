@@ -29,7 +29,9 @@ namespace Yonetim360Business.CQRS.CRM.Conversations.Queries.GetConversations
         public async Task<List<ConversationDto>> Handle(GetConversationQuery request, CancellationToken cancellationToken)
         {
             var conversations = await _conversationRepository.GetAllAsync(
-                filter: null,
+                filter: c =>
+               (!request.CustomerId.HasValue || c.CustomerId == request.CustomerId.Value) &&
+               (!request.ConversationStatus.HasValue || c.ConversationStatus == request.ConversationStatus.Value),
                 tracked: false,
                 pageSize: request.PageSize,
                 pageNumber: request.PageNumber,
