@@ -11,7 +11,7 @@ namespace Yonetim360Business.CQRS.CRM.CrmSolutionCenters.Commands.CreateSolution
 {
     public class CreateCrmSolutionRequestCommand:ICommand<CrmSolutionRequestDto>
     {
-        public Guid UserId { get; set; }
+        public Guid CreatedBy { get; set; }
         public SolutionRequestType SolutionRequestType { get; set; }
         public string Title { get; set; }
         public Priority Piority { get; set; }

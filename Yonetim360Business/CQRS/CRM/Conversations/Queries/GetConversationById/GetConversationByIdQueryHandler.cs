@@ -9,11 +9,12 @@ using Yonetim360.DataAccess.Repository.Abstract;
 using Yonetim360.DataAccess.UnitOfWorks.Abstract;
 using Yonetim360.Entity.CRM;
 using Yonetim360Business.DTO;
+using Yonetim360Business.DTO.CrmReadDtos;
 using Yonetim360Business.Mediator;
 
 namespace Yonetim360Business.CQRS.CRM.Conversations.Queries.GetConversationById
 {
-    public class GetConversationByIdQueryHandler : IQueryHandler<GetConversationByIdQuery, ConversationDto>
+    public class GetConversationByIdQueryHandler : IQueryHandler<GetConversationByIdQuery, ReadConversationDto>
     {
         private readonly IRepository<Conversation> _conversationRepository;
         private readonly IMapper  _mapper;
@@ -27,7 +28,7 @@ namespace Yonetim360Business.CQRS.CRM.Conversations.Queries.GetConversationById
             
         }
 
-        public async Task<ConversationDto> Handle(GetConversationByIdQuery request, CancellationToken cancellationToken)
+        public async Task<ReadConversationDto> Handle(GetConversationByIdQuery request, CancellationToken cancellationToken)
         {
             var conversation = await _conversationRepository.GetFirstOrDefaultAsync(
                 filter: x => x.Id == request.Id,
@@ -35,7 +36,7 @@ namespace Yonetim360Business.CQRS.CRM.Conversations.Queries.GetConversationById
                 .Include(c => c.Representatives)
                 .Include(c=>c.Customer)) ?? throw new InvalidDataException("Not found a conversation record");
 
-            return _mapper.Map<ConversationDto>(conversation);
+            return _mapper.Map<ReadConversationDto>(conversation);
 
         }
     }

@@ -29,7 +29,7 @@ namespace Yonetim360Business.CQRS.CRM.CrmSolutionCenters.Commands.CreateSolution
 
         public async Task<CrmSolutionRequestDto> Handle(CreateCrmSolutionRequestCommand request, CancellationToken cancellationToken)
         {
-            var ApplicationUser = await _userRepository.GetFirstOrDefaultAsync(x => x.Id == request.UserId) ??
+            var ApplicationUser = await _userRepository.GetFirstOrDefaultAsync(x => x.Id == request.CreatedBy) ??
                  throw new InvalidDataException("Not found ApplicationUser");
 
           var solutionRequest= _mapper.Map<CrmSolutionRequest>(request);

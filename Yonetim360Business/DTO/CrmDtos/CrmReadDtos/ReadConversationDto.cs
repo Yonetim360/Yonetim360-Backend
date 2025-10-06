@@ -4,22 +4,22 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Yonetim360.Entity.CRM;
-using Yonetim360Business.DTO;
-using Yonetim360Business.Mediator;
 
-namespace Yonetim360Business.CQRS.CRM.Conversations.Commands.CreateConversation
+namespace Yonetim360Business.DTO.CrmReadDtos
 {
-    public class CreateConversationCommand : ICommand<ConversationDto>
+    public class ReadConversationDto
     {
+        public Guid Id { get; set; }
         public Guid CreatedBy { get; set; }
         public Guid CustomerId { get; set; }
+        public string? CustomerCompanyName { get; set; }
         public ConversationType? ConversationType { get; set; }
         public MeetingType? MeetingType { get; set; }
         public string? ConversationInformation { get; set; }
         public string Subject { get; set; }
         public DateTime StartDateTime { get; set; }
         public int DurationInMinutes { get; set; }
-        public List<Guid> RepresentativeIds { get; set; } = new();
-        public ConversationStatus ConversationStatus { get; set; }
+        public List<string> RepresentativeNames { get; set; }
+        public ConversationStatus? ConversationStatus { get; set; }
     }
 }

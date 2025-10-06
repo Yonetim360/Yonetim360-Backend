@@ -9,11 +9,12 @@ using Yonetim360.DataAccess.Repository.Abstract;
 using Yonetim360.DataAccess.UnitOfWorks.Abstract;
 using Yonetim360.Entity;
 using Yonetim360Business.DTO;
+using Yonetim360Business.DTO.CrmDtos.CrmReadDtos;
 using Yonetim360Business.Mediator;
 
 namespace Yonetim360Business.CQRS.CRM.CrmAnnouncements.Queries.GetAnnouncements
 {
-    public class GetAnnouncementsQueryHandler : IQueryHandler<GetAnnouncementsQuery, List<AnnouncementDto>>
+    public class GetAnnouncementsQueryHandler : IQueryHandler<GetAnnouncementsQuery, List<ReadAnnouncementDto>>
     {
         private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
@@ -25,7 +26,7 @@ namespace Yonetim360Business.CQRS.CRM.CrmAnnouncements.Queries.GetAnnouncements
             _announcementRepository = _unitOfWork.GetRepository<Announcement>();
         }
 
-        public async Task<List<AnnouncementDto>> Handle(GetAnnouncementsQuery request, CancellationToken cancellationToken)
+        public async Task<List<ReadAnnouncementDto>> Handle(GetAnnouncementsQuery request, CancellationToken cancellationToken)
         {
            var query = await _announcementRepository.GetAllAsync(
                include:null,
@@ -35,7 +36,7 @@ namespace Yonetim360Business.CQRS.CRM.CrmAnnouncements.Queries.GetAnnouncements
                tracked: false
            );
 
-            return _mapper.Map<List<AnnouncementDto>>(query);
+            return _mapper.Map<List<ReadAnnouncementDto>>(query);
         }
     }
 }

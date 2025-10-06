@@ -16,6 +16,7 @@ namespace Yonetim360.Entity.CRM
         public string Explanation { get; set; }
         public Priority Priority { get; set; }
         public virtual ICollection<Representative> Representatives { get; set; } 
+        public SupportRequestStatus SupportRequestStatus { get; set; } = SupportRequestStatus.Pending;
 
     }
     public enum Priority
@@ -24,5 +25,11 @@ namespace Yonetim360.Entity.CRM
         Medium = 2,
         High = 3,
         Critic = 4
+    }
+
+    public enum SupportRequestStatus
+    {
+       Pending=0,
+       Completed=1
     }
 }

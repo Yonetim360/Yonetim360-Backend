@@ -9,11 +9,12 @@ using Yonetim360.DataAccess.Repository.Abstract;
 using Yonetim360.DataAccess.UnitOfWorks.Abstract;
 using Yonetim360.Entity.CRM;
 using Yonetim360Business.DTO;
+using Yonetim360Business.DTO.CrmReadDtos;
 using Yonetim360Business.Mediator;
 
 namespace Yonetim360Business.CQRS.CRM.OfferAndSales.Queries.GetOfferById
 {
-    public class GetOfferByIdQueryHandler : IQueryHandler<GetOfferByIdQuery, OfferDto>
+    public class GetOfferByIdQueryHandler : IQueryHandler<GetOfferByIdQuery, ReadOfferDto>
     {
         private readonly IMapper _mapper;
         private readonly IUnitOfWork _unitOfWork;
@@ -25,7 +26,7 @@ namespace Yonetim360Business.CQRS.CRM.OfferAndSales.Queries.GetOfferById
             _offerRepository = _unitOfWork.GetRepository<Offer>();
         }
 
-        public async Task<OfferDto> Handle(GetOfferByIdQuery request, CancellationToken cancellationToken)
+        public async Task<ReadOfferDto> Handle(GetOfferByIdQuery request, CancellationToken cancellationToken)
         {
             var offer = await _offerRepository.GetFirstOrDefaultAsync(
                 filter:x=>x.Id==request.Id,
@@ -35,7 +36,7 @@ namespace Yonetim360Business.CQRS.CRM.OfferAndSales.Queries.GetOfferById
                 .Include(c=>c.Representative)
                 ) ??
                 throw new Exception("Teklif bulunamadı.");
-            return _mapper.Map<OfferDto>(offer);
+            return _mapper.Map<ReadOfferDto>(offer);
         }
     }
 }

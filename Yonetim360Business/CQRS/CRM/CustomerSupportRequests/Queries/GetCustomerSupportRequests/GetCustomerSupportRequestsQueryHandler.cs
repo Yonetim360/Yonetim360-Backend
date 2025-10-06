@@ -9,11 +9,12 @@ using Yonetim360.DataAccess.Repository.Abstract;
 using Yonetim360.DataAccess.UnitOfWorks.Abstract;
 using Yonetim360.Entity.CRM;
 using Yonetim360Business.DTO;
+using Yonetim360Business.DTO.CrmReadDtos;
 using Yonetim360Business.Mediator;
 
 namespace Yonetim360Business.CQRS.CRM.CustomerSupportRequests.Queries.GetCustomerSupportRequests
 {
-    public class GetCustomerSupportRequestsQueryHandler : IQueryHandler<GetCustomerSupportRequestsQuery, List<CustomerSupportRequestDto>>
+    public class GetCustomerSupportRequestsQueryHandler : IQueryHandler<GetCustomerSupportRequestsQuery, List<ReadCustomerSupportRequestDto>>
     {
         private readonly IRepository<CustomerSupportRequest> _repository;
         private readonly IUnitOfWork _unitOfWork;
@@ -25,16 +26,19 @@ namespace Yonetim360Business.CQRS.CRM.CustomerSupportRequests.Queries.GetCustome
             _mapper = mapper;
         }
 
-        public async Task<List<CustomerSupportRequestDto>> Handle(GetCustomerSupportRequestsQuery request, CancellationToken cancellationToken)
+        public async Task<List<ReadCustomerSupportRequestDto>> Handle(GetCustomerSupportRequestsQuery request, CancellationToken cancellationToken)
         {
             var supports = await _repository.GetAllAsync(
                 filter: null,
                 tracked: false,
                 pageSize: request.PageSize,
                 pageNumber: request.PageNumber,
-                include:q=>q.Include(r=>r.Representatives)) ?? throw new InvalidDataException("Not found any customer support request records");
+                include:q=>q
+                .Include(r=>r.Representatives)
+                .Include(c=>c.Customer)
+                ) ?? throw new InvalidDataException("Not found any customer support request records");
 
-            return _mapper.Map<List<CustomerSupportRequestDto>>(supports);
+            return _mapper.Map<List<ReadCustomerSupportRequestDto>>(supports);
         }
     }
 }

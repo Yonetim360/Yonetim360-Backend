@@ -8,12 +8,12 @@ namespace Yonetim360.Entity.CRM
 {
     public class CrmTask : BaseEntity, ITenantEntity
     {
-        public Guid UserId { get; set; }
         public Guid TenantId { get; set; }
         public string Title { get; set; }
         public TaskCategory TaskCategory { get; set; }
         public DateTime Time { get; set; }
         public Representative Representative { get; set; }
+        public Guid RepresentativeId { get; set; }
         public string Description { get; set; } 
     }
 

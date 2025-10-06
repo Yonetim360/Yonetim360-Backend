@@ -5,11 +5,11 @@ using System.Text;
 using System.Threading.Tasks;
 using Yonetim360.Entity.CRM;
 
-namespace Yonetim360Business.DTO
+namespace Yonetim360Business.DTO.CrmDtos.CrmReadDtos
 {
-    public class CustomerDto
+    public class ReadCustomerDto
     {
-        public Guid UserId { get; set; }
+        public Guid CreatedBy { get; set; }
         public Guid Id { get; set; }
         public string CompanyName { get; set; }
         public string ContactPerson { get; set; }

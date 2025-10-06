@@ -3,14 +3,14 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Yonetim360.Entity.CRM;
 using Yonetim360.Entity.İK;
 
-namespace Yonetim360Business.DTO
+namespace Yonetim360Business.DTO.CrmDtos.CrmReadDtos
 {
-    public class RepresentativeDto
+    public class ReadRepresentativeDto
     {
         public Guid Id { get; set; }
+        public Guid CreatedBy { get; set; }
         public string FirstName { get; set; }
         public string LastName { get; set; }
         public string Email { get; set; }

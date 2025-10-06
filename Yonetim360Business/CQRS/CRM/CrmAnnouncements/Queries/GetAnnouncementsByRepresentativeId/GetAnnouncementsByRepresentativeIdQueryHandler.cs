@@ -10,11 +10,12 @@ using Yonetim360.DataAccess.UnitOfWorks.Abstract;
 using Yonetim360.Entity;
 using Yonetim360.Entity.CRM;
 using Yonetim360Business.DTO;
+using Yonetim360Business.DTO.CrmDtos.CrmReadDtos;
 using Yonetim360Business.Mediator;
 
 namespace Yonetim360Business.CQRS.CRM.CrmAnnouncements.Queries.GetAnnouncementByRepresentativeId
 {
-    public class GetAnnouncementsByRepresentativeIdQueryHandler : IQueryHandler<GetAnnouncementsByRepresentativeIdQuery, List<AnnouncementDto>>
+    public class GetAnnouncementsByRepresentativeIdQueryHandler : IQueryHandler<GetAnnouncementsByRepresentativeIdQuery, List<ReadAnnouncementDto>>
     {
         private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
@@ -30,7 +31,7 @@ namespace Yonetim360Business.CQRS.CRM.CrmAnnouncements.Queries.GetAnnouncementBy
             _representativeRepository = _unitOfWork.GetRepository<Representative>();
         }
 
-        public async Task<List<AnnouncementDto>> Handle(GetAnnouncementsByRepresentativeIdQuery request, CancellationToken cancellationToken)
+        public async Task<List<ReadAnnouncementDto>> Handle(GetAnnouncementsByRepresentativeIdQuery request, CancellationToken cancellationToken)
         {
            var representative = await _representativeRepository.GetFirstOrDefaultAsync(r => r.Id == request.RepresentativeId)??
                 throw new InvalidDataException("Not found a record for selected representative");
@@ -46,7 +47,7 @@ namespace Yonetim360Business.CQRS.CRM.CrmAnnouncements.Queries.GetAnnouncementBy
          .Select(ar => ar.Announcement) // Navigation property üzerinden erişim
          .ToList();
 
-            return _mapper.Map<List<AnnouncementDto>>(announcements);
+            return _mapper.Map<List<ReadAnnouncementDto>>(announcements);
         }
     }
 }

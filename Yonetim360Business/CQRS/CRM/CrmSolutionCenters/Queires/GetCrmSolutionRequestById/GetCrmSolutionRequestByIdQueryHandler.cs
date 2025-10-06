@@ -7,11 +7,12 @@ using System.Threading.Tasks;
 using Yonetim360.DataAccess.Repository.Abstract;
 using Yonetim360.DataAccess.UnitOfWorks.Abstract;
 using Yonetim360Business.DTO;
+using Yonetim360Business.DTO.CrmDtos.CrmReadDtos;
 using Yonetim360Business.Mediator;
 
 namespace Yonetim360Business.CQRS.CRM.CrmSolutionCenters.Queires.GetCrmSolutionRequestById
 {
-    public class GetCrmSolutionRequestByIdQueryHandler : IQueryHandler<GetCrmSolutionRequestByIdQuery, CrmSolutionRequestDto>
+    public class GetCrmSolutionRequestByIdQueryHandler : IQueryHandler<GetCrmSolutionRequestByIdQuery, ReadCrmSolutionRequestDto>
     {
         private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
@@ -23,11 +24,11 @@ namespace Yonetim360Business.CQRS.CRM.CrmSolutionCenters.Queires.GetCrmSolutionR
             _repository=_unitOfWork.GetRepository<CrmSolutionRequestDto>();
         }
 
-        public async Task<CrmSolutionRequestDto> Handle(GetCrmSolutionRequestByIdQuery request, CancellationToken cancellationToken)
+        public async Task<ReadCrmSolutionRequestDto> Handle(GetCrmSolutionRequestByIdQuery request, CancellationToken cancellationToken)
         {
             var query = await _repository.GetFirstOrDefaultAsync(x => x.Id == request.Id) ??
                 throw new InvalidDataException("Not found query");
-            return _mapper.Map<CrmSolutionRequestDto>(query);
+            return _mapper.Map<ReadCrmSolutionRequestDto>(query);
         }
     }
 }
