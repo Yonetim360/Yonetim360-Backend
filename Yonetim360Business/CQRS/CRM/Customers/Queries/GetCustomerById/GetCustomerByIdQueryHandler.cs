@@ -9,11 +9,12 @@ using Yonetim360.DataAccess.Repository.Concrete;
 using Yonetim360.DataAccess.UnitOfWorks.Abstract;
 using Yonetim360.Entity.CRM;
 using Yonetim360Business.DTO;
+using Yonetim360Business.DTO.CrmDtos.CrmReadDtos;
 using Yonetim360Business.Mediator;
 
 namespace Yonetim360Business.CQRS.CRM.Customers.Queries.GetCustomerById
 {
-    public class GetCustomerByIdQueryHandler : IQueryHandler<GetCustomerByIdQuery, CustomerDto>
+    public class GetCustomerByIdQueryHandler : IQueryHandler<GetCustomerByIdQuery, ReadCustomerDto>
     {
         private readonly IRepository<Customer> _customerRepository;
         private  readonly IUnitOfWork _unitOfWork;
@@ -26,11 +27,11 @@ namespace Yonetim360Business.CQRS.CRM.Customers.Queries.GetCustomerById
             _customerRepository = _unitOfWork.GetRepository<Customer>();
         }
 
-        public async Task<CustomerDto> Handle(GetCustomerByIdQuery request, CancellationToken cancellationToken)
+        public async Task<ReadCustomerDto> Handle(GetCustomerByIdQuery request, CancellationToken cancellationToken)
         {
             var customer = await _customerRepository.GetFirstOrDefaultAsync(x => x.Id == request.Id) ??
                 throw new InvalidDataException("Customer not found");
-            return _mapper.Map<CustomerDto>(customer);
+            return _mapper.Map<ReadCustomerDto>(customer);
         }
     }   
 }

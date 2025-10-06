@@ -9,11 +9,12 @@ using Yonetim360.DataAccess.Repository.Abstract;
 using Yonetim360.DataAccess.UnitOfWorks.Abstract;
 using Yonetim360.Entity.CRM;
 using Yonetim360Business.DTO;
+using Yonetim360Business.DTO.CrmDtos.CrmReadDtos;
 using Yonetim360Business.Mediator;
 
 namespace Yonetim360Business.CQRS.CRM.CrmTasks.Queries.GetCrmTasks
 {
-    public class GetCrmTasksQueryHandler : IQueryHandler<GetCrmTasksQuery, List<CrmTaskDto>>
+    public class GetCrmTasksQueryHandler : IQueryHandler<GetCrmTasksQuery, List<ReadCrmTaskDto>>
     {
         private readonly IMapper _mapper;
         private readonly IUnitOfWork _unitOfWork;
@@ -25,7 +26,7 @@ namespace Yonetim360Business.CQRS.CRM.CrmTasks.Queries.GetCrmTasks
             _repository= _unitOfWork.GetRepository<CrmTask>();
         }
 
-        public async Task<List<CrmTaskDto>> Handle(GetCrmTasksQuery request, CancellationToken cancellationToken)
+        public async Task<List<ReadCrmTaskDto>> Handle(GetCrmTasksQuery request, CancellationToken cancellationToken)
         {
             var query = await _repository.GetAllAsync(
                 filter: null,
@@ -34,7 +35,7 @@ namespace Yonetim360Business.CQRS.CRM.CrmTasks.Queries.GetCrmTasks
                 pageNumber: request.PageNumber,
                 include: q => q.Include(x => x.Representative)
                 ) ?? throw new InvalidDataException("Not found tasks");
-            return _mapper.Map<List<CrmTaskDto>>(query);
+            return _mapper.Map<List<ReadCrmTaskDto>>(query);
         }
     }
 }

@@ -5,12 +5,12 @@ using System.Text;
 using System.Threading.Tasks;
 using Yonetim360.Entity.CRM;
 
-namespace Yonetim360Business.DTO
+namespace Yonetim360Business.DTO.CrmDtos.CrmReadDtos
 {
-    public class CrmSolutionRequestDto
+    public class ReadCrmSolutionRequestDto
     {
         public Guid Id { get; set; }
-        public Guid UserId { get; set; }
+        public Guid CreatedBy { get; set; } 
         public SolutionRequestType SolutionRequestType { get; set; }
         public string Title { get; set; }
         public Priority Piority { get; set; }
@@ -20,5 +20,6 @@ namespace Yonetim360Business.DTO
         public string PhoneNumber { get; set; }
         public ConversationType ConversationType { get; set; }
         public string DocumentUrl { get; set; }
+
     }
 }

@@ -46,7 +46,7 @@ namespace Yonetim360Business.CQRS.CRM.Conversations.Commands.UpdateConversation
                 .GreaterThan(0)
                 .WithMessage("DurationInMinutes must be greater than 0");
 
-            RuleFor(x => x.ConversationDto.Representatives)
+            RuleFor(x => x.ConversationDto.RepresentativeIds)
     .NotEmpty()
     .WithMessage("At least one representative must be assigned");
 

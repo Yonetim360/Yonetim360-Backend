@@ -11,7 +11,7 @@ namespace Yonetim360Business.CQRS.CRM.CustomerSupportRequests.Commands.CreateCus
 {
     public class CreateCustomerSupportRequestCommand:ICommand<CustomerSupportRequestDto>
     {
-        public Guid UserId { get; set; }
+        public Guid CreatedBy { get; set; }
         public Guid CustomerId { get; set; }
         public string Subject { get; set; }
         public string Explanation { get; set; }

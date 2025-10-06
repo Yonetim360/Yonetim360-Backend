@@ -9,7 +9,6 @@ namespace Yonetim360.Entity.CRM
     public class Offer : BaseEntity, ITenantEntity
     {
         public Guid TenantId { get; set; }
-        public Guid UserId { get; set; }
         public string Title { get; set; }
         public Representative Representative  { get; set; }
         public Guid RepresentativeId { get; set; }

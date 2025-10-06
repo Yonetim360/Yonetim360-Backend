@@ -10,16 +10,15 @@ namespace Yonetim360Business.DTO
     public class ConversationDto
     {
         public Guid Id { get; set; }
-        public Guid UserId { get; set; }
+        public Guid? UpdatedBy { get; set; }
         public Guid CustomerId { get; set; }
-        public string? CustomerCompanyName { get; set; }
         public ConversationType? ConversationType { get; set; }
         public MeetingType? MeetingType { get; set; }
         public string? ConversationInformation { get; set; }
         public string Subject { get; set; }
         public DateTime StartDateTime { get; set; }
         public int DurationInMinutes { get; set; }
-        public List<RepresentativeDto> Representatives { get; set; } = new();
+        public List<Guid> RepresentativeIds { get; set; } = new();
         public ConversationStatus? ConversationStatus { get; set; }
     }
 }

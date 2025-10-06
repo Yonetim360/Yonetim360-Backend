@@ -12,7 +12,6 @@ namespace Yonetim360.Entity
         public Guid TenantId { get; set; }
         public string Title { get; set; }
         public string Content { get; set; }
-        public Guid UserId  { get; set; }
         public Piority Piority { get; set; }
         public AnnouncementDepartment AnnouncementDepartment { get; set; }
         public AnnouncementRepresentative AnnouncementRepresentative { get; set; }

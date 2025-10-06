@@ -4,19 +4,20 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Yonetim360.Entity.CRM;
-using Yonetim360Business.DTO;
-using Yonetim360Business.Mediator;
+using Yonetim360.Entity.İK;
 
-namespace Yonetim360Business.CQRS.CRM.Representatives.Commands.CreateRepresentative
+namespace Yonetim360Business.DTO
 {
-    public class CreateRepresentativeCommand:ICommand<RepresentativeDto>
+    public class RepresentativeDto
     {
-        public Guid ApplicationUserId { get; set; }
-        public Guid CreatedBy { get; set; }
+        public Guid Id { get; set; }
+        public Guid UpdatedBy { get; set; }
         public string FirstName { get; set; }
         public string LastName { get; set; }
         public string Email { get; set; }
         public string PhoneNumber { get; set; }
+        public Department Department { get; set; }
         public string Notes { get; set; }
+        public Guid UserId { get; set; }
     }
 }

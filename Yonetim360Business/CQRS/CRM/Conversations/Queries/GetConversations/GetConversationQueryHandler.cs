@@ -9,11 +9,12 @@ using Yonetim360.DataAccess.Repository.Abstract;
 using Yonetim360.DataAccess.UnitOfWorks.Abstract;
 using Yonetim360.Entity.CRM;
 using Yonetim360Business.DTO;
+using Yonetim360Business.DTO.CrmReadDtos;
 using Yonetim360Business.Mediator;
 
 namespace Yonetim360Business.CQRS.CRM.Conversations.Queries.GetConversations
 {
-    public class GetConversationQueryHandler : IQueryHandler<GetConversationQuery, List<ConversationDto>>
+    public class GetConversationQueryHandler : IQueryHandler<GetConversationQuery, List<ReadConversationDto>>
     {
         private readonly IRepository<Conversation> _conversationRepository;
         private readonly IMapper _mapper;
@@ -26,7 +27,7 @@ namespace Yonetim360Business.CQRS.CRM.Conversations.Queries.GetConversations
             _conversationRepository = _unitOfWork.GetRepository<Conversation>();
         }
 
-        public async Task<List<ConversationDto>> Handle(GetConversationQuery request, CancellationToken cancellationToken)
+        public async Task<List<ReadConversationDto>> Handle(GetConversationQuery request, CancellationToken cancellationToken)
         {
             var conversations = await _conversationRepository.GetAllAsync(
                 filter: c =>
@@ -41,7 +42,7 @@ namespace Yonetim360Business.CQRS.CRM.Conversations.Queries.GetConversations
                              
                 ?? throw new InvalidDataException("Not found any conversation records");
 
-            return _mapper.Map<List<ConversationDto>>(conversations);
+            return _mapper.Map<List<ReadConversationDto>>(conversations);
         }
     }
 }
