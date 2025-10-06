@@ -80,7 +80,7 @@ namespace Yonetim360Business.CQRS.CRM.CrmAnnouncements.Commands.AssignAnnounceme
                     Title = announcement.Title,
                     Content = announcement.Content,
                     CreatedDate = announcement.CreatedAt,
-                    CreatedBy = announcement.UserId,
+                    CreatedBy = announcement.CreatedBy,
                     AssignedDate = request.AssignedDate,
                     AssignedBy = user.UserName ?? user.Email ?? user.Id.ToString(),
                     TenantId = announcement.TenantId,

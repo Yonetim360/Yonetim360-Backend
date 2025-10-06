@@ -28,7 +28,7 @@ namespace Yonetim360Business.CQRS.CRM.OfferAndSales.Commands.UpdateOffer
 
         public async Task<bool> Handle(UpdateOfferCommand request, CancellationToken cancellationToken)
         {
-            var ApplicationUser = await _userRepository.GetFirstOrDefaultAsync(x => x.Id == request.OfferDto.UserId) ??
+            var ApplicationUser = await _userRepository.GetFirstOrDefaultAsync(x => x.Id == request.OfferDto.UpdatedBy) ??
                  throw new InvalidDataException("Not found an ApplicationUser");
             var updatedOffer= await _offerRepository.GetFirstOrDefaultAsync(x => x.Id == request.OfferDto.Id);
 

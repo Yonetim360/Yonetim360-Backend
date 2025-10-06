@@ -31,7 +31,7 @@ namespace Yonetim360Business.CQRS.CRM.Customers.Commands.CreateCustomer
 
         public async Task<CustomerDto> Handle(CreateCustomerCommand request, CancellationToken cancellationToken)
         {
-            var ApplicationUser = await _userRepository.GetFirstOrDefaultAsync(x=>x.Id==request.UserId)??
+            var ApplicationUser = await _userRepository.GetFirstOrDefaultAsync(x=>x.Id==request.CreatedBy)??
                 throw new InvalidDataException("ApplicationUser not found");
             
             var newCustomer =  _mapper.Map<Customer>(request) ?? throw new InvalidDataException("Mapping failed");

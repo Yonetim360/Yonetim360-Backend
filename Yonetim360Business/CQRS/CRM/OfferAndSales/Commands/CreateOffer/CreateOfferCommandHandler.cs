@@ -29,7 +29,7 @@ namespace Yonetim360Business.CQRS.CRM.OfferAndSales.Commands.CreateOffer
 
         public async Task<OfferDto> Handle(CreateOfferCommand request, CancellationToken cancellationToken)
         {
-            var ApplicationUser = await _userRepository.GetFirstOrDefaultAsync(x => x.Id == request.UserId) ??
+            var ApplicationUser = await _userRepository.GetFirstOrDefaultAsync(x => x.Id == request.CreatedBy) ??
                 throw new InvalidDataException("Not found an ApplicationUser");
             var offer = _mapper.Map<Offer>(request);
 

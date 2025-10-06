@@ -11,7 +11,7 @@ namespace Yonetim360Business.CQRS.CRM.Conversations.Commands.CreateConversation
     {
         public CreateConversationCommandValidator()
         {
-            RuleFor(x => x.UserId)
+            RuleFor(x => x.CreatedBy)
              .NotEmpty()
              .WithMessage("UserId is required");
 

@@ -14,7 +14,7 @@ namespace Yonetim360Business.CQRS.CRM.Conversations.Commands.UpdateConversation
             RuleFor(x=>x.ConversationDto.Id).NotEmpty()
                 .WithMessage("Conversation ID is required");
 
-            RuleFor(x => x.ConversationDto.UserId)
+            RuleFor(x => x.ConversationDto.UpdatedBy)
              .NotEmpty()
              .WithMessage("UserId is required");
 

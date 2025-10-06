@@ -20,7 +20,7 @@ namespace Yonetim360Business.CQRS.CRM.CustomerSupportRequests.Commands.CreateCus
             RuleFor(x => x.Priority).NotEmpty().WithMessage("Priority is required.").IsInEnum()
                 .WithMessage("Priority must be one of the defined values.");
             RuleFor(x => x.RepresentativeIds).NotEmpty().WithMessage("At least one representative is required.").NotNull().WithMessage("Representative cannot null");
-            RuleFor(x => x.UserId).NotEmpty().WithMessage("UserId is required.")
+            RuleFor(x => x.CreatedBy).NotEmpty().WithMessage("UserId is required.")
                 .NotNull().WithMessage("UserId cannot null");
 
 

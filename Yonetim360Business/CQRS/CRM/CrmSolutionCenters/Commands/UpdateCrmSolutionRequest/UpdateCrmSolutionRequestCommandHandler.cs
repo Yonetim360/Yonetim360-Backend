@@ -30,7 +30,7 @@ namespace Yonetim360Business.CQRS.CRM.CrmSolutionCenters.Commands.UpdateSolution
 
         public async Task<bool> Handle(UpdateCrmSolutionRequestCommand request, CancellationToken cancellationToken)
         {
-            var ApplicationUser = await _userRepository.GetFirstOrDefaultAsync(x => x.Id == request.CrmSolutionRequestDto.UserId) ??
+            var ApplicationUser = await _userRepository.GetFirstOrDefaultAsync(x => x.Id == request.CrmSolutionRequestDto.UpdatedBy) ??
                  throw new InvalidDataException("Not found ApplicationUser");
 
             var solutionRequest = await _repository.GetFirstOrDefaultAsync(x => x.Id == request.CrmSolutionRequestDto.Id) ??

@@ -29,7 +29,7 @@ namespace Yonetim360Business.CQRS.CRM.CustomerSupportRequests.Commands.UpdateCus
         public async Task<bool> Handle(UpdateCustomerSupportRequestCommand request, CancellationToken cancellationToken)
         {
 
-            var ApplicationUser = await _userRepository.GetFirstOrDefaultAsync(x => x.Id == request.CustomerSupportRequestDto.UserId) ??
+            var ApplicationUser = await _userRepository.GetFirstOrDefaultAsync(x => x.Id == request.CustomerSupportRequestDto.UpdatedBy) ??
                 throw new InvalidDataException("ApplicationUser not found");
 
             var updatedCustomerSupportRequest = await _repository.GetFirstOrDefaultAsync(x => x.Id == request.CustomerSupportRequestDto.Id);

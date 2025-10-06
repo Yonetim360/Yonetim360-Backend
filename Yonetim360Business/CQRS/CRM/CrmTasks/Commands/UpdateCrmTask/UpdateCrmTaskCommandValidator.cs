@@ -14,7 +14,7 @@ namespace Yonetim360Business.CQRS.CRM.CrmTasks.Commands.UpdateCrmTask
             RuleFor(x => x.CrmTaskDto.Id)
                 .NotEmpty().WithMessage("Task ID cannot be empty.")
                 .NotNull().WithMessage("Task ID cannot be null.");
-            RuleFor(x => x.CrmTaskDto.UserId)
+            RuleFor(x => x.CrmTaskDto.UpdatedBy)
                 .NotEmpty().WithMessage("ApplicationUser ID cannot be empty.");
             RuleFor(x => x.CrmTaskDto.Title).NotEmpty()
                 .WithMessage("Task title cannot be empty.")

@@ -28,7 +28,7 @@ namespace Yonetim360Business.CQRS.CRM.CrmTasks.Commands.UpdateCrmTask
 
         public async Task<bool> Handle(UpdateCrmTaskCommand request, CancellationToken cancellationToken)
         {
-            var ApplicationUser = await _userRepository.GetFirstOrDefaultAsync(x => x.Id == request.CrmTaskDto.UserId) ??
+            var ApplicationUser = await _userRepository.GetFirstOrDefaultAsync(x => x.Id == request.CrmTaskDto.UpdatedBy) ??
               throw new InvalidDataException("ApplicationUser not found");
 
             var crmTask = await _repository.GetFirstOrDefaultAsync(x => x.Id == request.CrmTaskDto.Id) ??

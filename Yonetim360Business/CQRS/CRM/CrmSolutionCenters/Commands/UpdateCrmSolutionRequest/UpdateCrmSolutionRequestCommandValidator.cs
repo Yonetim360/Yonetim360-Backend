@@ -15,7 +15,7 @@ namespace Yonetim360Business.CQRS.CRM.CrmSolutionCenters.Commands.UpdateSolution
                 .NotEmpty().WithMessage("Id is required")
                 .NotNull().WithMessage("Id cannot be null");
 
-            RuleFor(x => x.CrmSolutionRequestDto.UserId)
+            RuleFor(x => x.CrmSolutionRequestDto.UpdatedBy)
           .NotEmpty().WithMessage("UserId is required.");
 
             RuleFor(x => x.CrmSolutionRequestDto.SolutionRequestType)

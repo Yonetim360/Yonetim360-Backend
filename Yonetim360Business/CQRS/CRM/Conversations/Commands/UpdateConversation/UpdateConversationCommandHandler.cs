@@ -28,7 +28,7 @@ namespace Yonetim360Business.CQRS.CRM.Conversations.Commands.UpdateConversation
 
         public async Task<bool> Handle(UpdateConversationCommand request, CancellationToken cancellationToken)
         {
-            var ApplicationUser = await _userRepository.GetFirstOrDefaultAsync(x=>x.Id == request.ConversationDto.UserId) ??
+            var ApplicationUser = await _userRepository.GetFirstOrDefaultAsync(x=>x.Id == request.ConversationDto.UpdatedBy) ??
                 throw new InvalidDataException("ApplicationUser not found");
 
             var updatedConversation = await _conversationRepository.GetFirstOrDefaultAsync(x => x.Id == request.ConversationDto.Id);

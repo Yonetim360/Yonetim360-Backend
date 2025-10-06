@@ -30,7 +30,7 @@ namespace Yonetim360Business.CQRS.CRM.CrmTasks.Commands.CreateCrmTask
 
         public async Task<CrmTaskDto> Handle(CreateCrmTaskCommand request, CancellationToken cancellationToken)
         {
-            var ApplicationUser = await _userRepository.GetFirstOrDefaultAsync(x => x.Id == request.UserId) ??
+            var ApplicationUser = await _userRepository.GetFirstOrDefaultAsync(x => x.Id == request.CreatedBy) ??
                 throw new InvalidDataException("ApplicationUser not found");
 
             var newCrmTask = _mapper.Map<CrmTask>(request) ?? throw new InvalidDataException("Mapping failed");

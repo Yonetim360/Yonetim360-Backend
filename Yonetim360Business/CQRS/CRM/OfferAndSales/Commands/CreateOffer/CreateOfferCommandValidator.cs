@@ -11,7 +11,7 @@ namespace Yonetim360Business.CQRS.CRM.OfferAndSales.Commands.CreateOffer
     {
         public CreateOfferCommandValidator()
         {
-            RuleFor(x => x.UserId)
+            RuleFor(x => x.CreatedBy)
            .NotEmpty().WithMessage("must be selected.");
 
             RuleFor(x => x.Title)

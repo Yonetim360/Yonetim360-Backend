@@ -29,7 +29,7 @@ namespace Yonetim360Business.CQRS.CRM.Representatives.Commands.CreateRepresentat
 
         public async Task<RepresentativeDto> Handle(CreateRepresentativeCommand request, CancellationToken cancellationToken)
         {
-           var ApplicationUser = await _userRepository.GetFirstOrDefaultAsync(x=>x.Id==request.UserId)??
+           var ApplicationUser = await _userRepository.GetFirstOrDefaultAsync(x=>x.Id==request.CreatedBy)??
                 throw new InvalidDataException("ApplicationUser not found");
 
             var representative = _mapper.Map<Representative>(request);

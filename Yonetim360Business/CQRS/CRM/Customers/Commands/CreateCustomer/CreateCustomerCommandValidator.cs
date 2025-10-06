@@ -11,7 +11,7 @@ namespace Yonetim360Business.CQRS.CRM.Customers.Commands.CreateCustomer
     {
         public CreateCustomerCommandValidator()
         {
-            RuleFor(x => x.UserId)
+            RuleFor(x => x.CreatedBy)
             .NotEmpty().WithMessage("UserId is required.");
 
             RuleFor(x => x.CompanyName)

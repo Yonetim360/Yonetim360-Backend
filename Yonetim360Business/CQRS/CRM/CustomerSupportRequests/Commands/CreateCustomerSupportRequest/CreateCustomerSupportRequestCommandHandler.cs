@@ -33,7 +33,7 @@ namespace Yonetim360Business.CQRS.CRM.CustomerSupportRequests.Commands.CreateCus
 
         public async Task<CustomerSupportRequestDto> Handle(CreateCustomerSupportRequestCommand request, CancellationToken cancellationToken)
         {
-            var ApplicationUser = await _userRepository.GetFirstOrDefaultAsync(x => x.Id == request.UserId) ??
+            var ApplicationUser = await _userRepository.GetFirstOrDefaultAsync(x => x.Id == request.CreatedBy) ??
                 throw new InvalidDataException("ApplicationUser not found");
 
             var suppoort = _mapper.Map<CustomerSupportRequest>(request) ??
