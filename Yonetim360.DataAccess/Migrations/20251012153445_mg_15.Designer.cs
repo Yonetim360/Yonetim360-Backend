@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Yonetim360.DataAccess.Data;
 
@@ -11,9 +12,11 @@ using Yonetim360.DataAccess.Data;
 namespace Yonetim360.DataAccess.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20251012153445_mg_15")]
+    partial class mg_15
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -35,21 +38,6 @@ namespace Yonetim360.DataAccess.Migrations
                     b.HasIndex("RepresentativesId");
 
                     b.ToTable("ConversationRepresentative");
-                });
-
-            modelBuilder.Entity("CrmTaskRepresentative", b =>
-                {
-                    b.Property<Guid>("CrmTasksId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid>("RepresentativeId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.HasKey("CrmTasksId", "RepresentativeId");
-
-                    b.HasIndex("RepresentativeId");
-
-                    b.ToTable("CrmTaskRepresentative");
                 });
 
             modelBuilder.Entity("CustomerSupportRequestRepresentative", b =>
@@ -566,20 +554,20 @@ namespace Yonetim360.DataAccess.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<DateTime>("EndDate")
-                        .HasColumnType("datetime2");
-
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("bit");
 
-                    b.Property<DateTime>("StartDate")
-                        .HasColumnType("datetime2");
+                    b.Property<Guid>("RepresentativeId")
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<int>("TaskCategory")
                         .HasColumnType("int");
 
                     b.Property<Guid>("TenantId")
                         .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("Time")
+                        .HasColumnType("datetime2");
 
                     b.Property<string>("Title")
                         .IsRequired()
@@ -592,6 +580,8 @@ namespace Yonetim360.DataAccess.Migrations
                         .HasColumnType("uniqueidentifier");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("RepresentativeId");
 
                     b.ToTable("Tasks");
                 });
@@ -954,21 +944,6 @@ namespace Yonetim360.DataAccess.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("CrmTaskRepresentative", b =>
-                {
-                    b.HasOne("Yonetim360.Entity.CRM.CrmTask", null)
-                        .WithMany()
-                        .HasForeignKey("CrmTasksId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Yonetim360.Entity.CRM.Representative", null)
-                        .WithMany()
-                        .HasForeignKey("RepresentativeId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
             modelBuilder.Entity("CustomerSupportRequestRepresentative", b =>
                 {
                     b.HasOne("Yonetim360.Entity.CRM.CustomerSupportRequest", null)
@@ -1084,6 +1059,17 @@ namespace Yonetim360.DataAccess.Migrations
                     b.Navigation("Customer");
                 });
 
+            modelBuilder.Entity("Yonetim360.Entity.CRM.CrmTask", b =>
+                {
+                    b.HasOne("Yonetim360.Entity.CRM.Representative", "Representative")
+                        .WithMany("CrmTasks")
+                        .HasForeignKey("RepresentativeId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Representative");
+                });
+
             modelBuilder.Entity("Yonetim360.Entity.CRM.CustomerSupportRequest", b =>
                 {
                     b.HasOne("Yonetim360.Entity.CRM.Customer", "Customer")
@@ -1121,6 +1107,11 @@ namespace Yonetim360.DataAccess.Migrations
 
                     b.Navigation("AnnouncementRepresentative")
                         .IsRequired();
+                });
+
+            modelBuilder.Entity("Yonetim360.Entity.CRM.Representative", b =>
+                {
+                    b.Navigation("CrmTasks");
                 });
 #pragma warning restore 612, 618
         }

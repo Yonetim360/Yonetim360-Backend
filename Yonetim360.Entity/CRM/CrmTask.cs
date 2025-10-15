@@ -10,10 +10,10 @@ namespace Yonetim360.Entity.CRM
     {
         public Guid TenantId { get; set; }
         public string Title { get; set; }
+        public DateTime StartDate { get; set; }
+        public DateTime EndDate { get; set; }
         public TaskCategory TaskCategory { get; set; }
-        public DateTime Time { get; set; }
-        public Representative Representative { get; set; }
-        public Guid RepresentativeId { get; set; }
+        public ICollection<Representative> Representative { get; set; } = new List<Representative>();
         public string Description { get; set; } 
     }
 

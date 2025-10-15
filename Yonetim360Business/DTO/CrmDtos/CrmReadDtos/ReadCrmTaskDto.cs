@@ -13,8 +13,9 @@ namespace Yonetim360Business.DTO.CrmDtos.CrmReadDtos
         public Guid CreatedBy { get; set; }
         public string Title { get; set; }
         public TaskCategory TaskCategory { get; set; }
-        public DateTime Time { get; set; }
+        public DateTime StartDate { get; set; }
+        public DateTime EndDate { get; set; }
         public string Description { get; set; }
-        public RepresentativeDto Representative { get; set; }
+        public List<ReadCrmLightRepresentativeDto> Representatives { get; set; }
     }
 }

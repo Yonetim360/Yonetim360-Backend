@@ -28,13 +28,33 @@ namespace Yonetim360Business.CQRS.CRM.OfferAndSales.Commands.UpdateOffer
 
         public async Task<bool> Handle(UpdateOfferCommand request, CancellationToken cancellationToken)
         {
-            var ApplicationUser = await _userRepository.GetFirstOrDefaultAsync(x => x.Id == request.OfferDto.UpdatedBy) ??
-                 throw new InvalidDataException("Not found an ApplicationUser");
-            var updatedOffer= await _offerRepository.GetFirstOrDefaultAsync(x => x.Id == request.OfferDto.Id);
+            var applicationUser = await _userRepository.GetFirstOrDefaultAsync(x => x.Id == request.OfferDto.UpdatedBy)
+                ?? throw new InvalidDataException("Not found an ApplicationUser");
 
-            _mapper.Map(request.OfferDto, updatedOffer);
+            var existingOffer = await _offerRepository.GetFirstOrDefaultAsync(x => x.Id == request.OfferDto.Id)
+                ?? throw new InvalidDataException("Offer not found");
+
+            // Map gelen DTO'daki güncel verileri mevcut entity'e uygula
+            _mapper.Map(request.OfferDto, existingOffer);
+
+            // FinalAmount'ı yeniden hesapla
+            switch (existingOffer.DiscountType)
+            {
+                case DiscountType.Percentage:
+                    existingOffer.FinalAmount = existingOffer.Amount - (existingOffer.Amount * existingOffer.DiscountValue / 100);
+                    break;
+                case DiscountType.FixedAmount:
+                    existingOffer.FinalAmount = existingOffer.Amount - existingOffer.DiscountValue;
+                    break;
+                case DiscountType.None:
+                default:
+                    existingOffer.FinalAmount = existingOffer.Amount;
+                    break;
+            }
+
             await _unitOfWork.CommitAsync();
             return true;
         }
+
     }
 }

@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -28,15 +29,43 @@ namespace Yonetim360Business.CQRS.CRM.CustomerSupportRequests.Commands.UpdateCus
 
         public async Task<bool> Handle(UpdateCustomerSupportRequestCommand request, CancellationToken cancellationToken)
         {
+            var applicationUser = await _userRepository.GetFirstOrDefaultAsync(x => x.Id == request.CustomerSupportRequestDto.UpdatedBy)
+                ?? throw new InvalidDataException("ApplicationUser not found");
 
-            var ApplicationUser = await _userRepository.GetFirstOrDefaultAsync(x => x.Id == request.CustomerSupportRequestDto.UpdatedBy) ??
-                throw new InvalidDataException("ApplicationUser not found");
+            var updatedCustomerSupportRequest = await _repository.GetFirstOrDefaultAsync(
+                x => x.Id == request.CustomerSupportRequestDto.Id,
+                include: q => q.Include(c => c.Representatives)
+            ) ?? throw new InvalidDataException("CustomerSupportRequest not found");
 
-            var updatedCustomerSupportRequest = await _repository.GetFirstOrDefaultAsync(x => x.Id == request.CustomerSupportRequestDto.Id);
+            // Temel alanları güncelle
+            updatedCustomerSupportRequest.Subject = request.CustomerSupportRequestDto.Subject;
+            updatedCustomerSupportRequest.Explanation = request.CustomerSupportRequestDto.Explanation;
+            updatedCustomerSupportRequest.Priority = request.CustomerSupportRequestDto.Priority;
+            updatedCustomerSupportRequest.SupportRequestStatus = request.CustomerSupportRequestDto.SupportRequestStatus;
+            updatedCustomerSupportRequest.UpdatedBy = request.CustomerSupportRequestDto.UpdatedBy;
+            // Representatives güncelle
+            updatedCustomerSupportRequest.Representatives ??= new List<Representative>();
 
-            _mapper.Map(request.CustomerSupportRequestDto, updatedCustomerSupportRequest);
+            // Önce mevcut ilişkileri temizle
+            updatedCustomerSupportRequest.Representatives.Clear();
+
+            // Yeni Id’leri ekle
+            if (request.CustomerSupportRequestDto.RepresentativeIds != null)
+            {
+                var repRepo = _unitOfWork.GetRepository<Representative>();
+                foreach (var repId in request.CustomerSupportRequestDto.RepresentativeIds)
+                {
+                    var rep = await repRepo.GetFirstOrDefaultAsync(r => r.Id == repId);
+                    if (rep != null)
+                        updatedCustomerSupportRequest.Representatives.Add(rep);
+                }
+            }
+
             await _unitOfWork.CommitAsync();
             return true;
         }
+
+
+
     }
 }

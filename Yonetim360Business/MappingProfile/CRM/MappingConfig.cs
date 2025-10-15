@@ -31,11 +31,16 @@ namespace Yonetim360Business.MappingProfile.CRM
             CreateMap<Customer, ReadCustomerDto>();
             CreateMap<CreateConversationCommand, Conversation>().ReverseMap();
             CreateMap<Conversation, ReadConversationDto>()
-           .ForMember(dest => dest.CustomerCompanyName,
-               opt => opt.MapFrom(src => src.Customer.CompanyName))
-           .ForMember(dest=>dest.RepresentativeNames,
-               opt=>opt.MapFrom(src=>src.Representatives.Select(r=>r.FirstName + " " + r.LastName).ToList())
-           );
+     .ForMember(dest => dest.CustomerCompanyName,
+         opt => opt.MapFrom(src => src.Customer.CompanyName))
+     .ForMember(dest => dest.Representatives,
+         opt => opt.MapFrom(src => src.Representatives
+             .Select(r => new ReadCrmLightRepresentativeDto
+             {
+                 Id = r.Id,
+                 FullName = r.FirstName + " " + r.LastName
+             }).ToList()
+         ));
             CreateMap<Conversation,ConversationDto>().ReverseMap();
             CreateMap<UpdateConversationStatusCommand, Conversation>().ReverseMap();
             CreateMap<Offer,ReadOfferDto>()
@@ -49,10 +54,25 @@ namespace Yonetim360Business.MappingProfile.CRM
             CreateMap<CreateCustomerSupportRequestCommand,CustomerSupportRequest>().ReverseMap();
             CreateMap<CustomerSupportRequestDto,CustomerSupportRequest>().ReverseMap();
             CreateMap<CustomerSupportRequest, ReadCustomerSupportRequestDto>()
-                .ForMember(dest => dest.CustomerCompanyName, opt => opt.MapFrom(src => src.Customer.CompanyName));
+    .ForMember(dest => dest.CustomerCompanyName,
+        opt => opt.MapFrom(src => src.Customer.CompanyName))
+    .ForMember(dest => dest.Representatives,
+        opt => opt.MapFrom(src => src.Representatives
+            .Select(r => new ReadCrmLightRepresentativeDto
+            {
+                Id = r.Id,
+                FullName = r.FirstName + " " + r.LastName
+            }).ToList()));
             CreateMap<CreateCrmTaskCommand, CrmTask>().ReverseMap();
             CreateMap<CrmTaskDto, CrmTask>().ReverseMap();
-            CreateMap<CrmTask, ReadCrmTaskDto>();
+            CreateMap<CrmTask, ReadCrmTaskDto>()
+    .ForMember(dest => dest.Representatives,
+        opt => opt.MapFrom(src => src.Representative
+            .Select(r => new ReadCrmLightRepresentativeDto
+            {
+                Id = r.Id,
+                FullName = r.FirstName + " " + r.LastName
+            }).ToList()));
             CreateMap<CrmSolutionRequestDto, CrmSolutionRequest>().ReverseMap();
             CreateMap<CrmSolutionRequest, ReadCrmSolutionRequestDto>();
             CreateMap<CreateCrmSolutionRequestCommand, CrmSolutionRequest>().ReverseMap();

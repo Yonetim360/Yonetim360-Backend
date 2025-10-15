@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Yonetim360.Entity.CRM;
+using Yonetim360Business.DTO.CrmDtos.CrmReadDtos;
 
 namespace Yonetim360Business.DTO.CrmReadDtos
 {
@@ -19,7 +20,7 @@ namespace Yonetim360Business.DTO.CrmReadDtos
         public string Subject { get; set; }
         public DateTime StartDateTime { get; set; }
         public int DurationInMinutes { get; set; }
-        public List<string> RepresentativeNames { get; set; }
+        public List<ReadCrmLightRepresentativeDto> Representatives { get; set; }
         public ConversationStatus? ConversationStatus { get; set; }
     }
 }

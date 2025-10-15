@@ -16,8 +16,6 @@ namespace Yonetim360Business.DTO
         public string LastName { get; set; }
         public string Email { get; set; }
         public string PhoneNumber { get; set; }
-        public Department Department { get; set; }
         public string Notes { get; set; }
-        public Guid UserId { get; set; }
     }
 }

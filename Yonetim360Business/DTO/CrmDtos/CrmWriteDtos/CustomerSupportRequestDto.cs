@@ -15,7 +15,7 @@ namespace Yonetim360Business.DTO
         public string Subject { get; set; }
         public string Explanation { get; set; }
         public Priority Priority { get; set; }
-        public List<RepresentativeDto> Representatives { get; set; } = new();
+        public List<Guid> RepresentativeIds { get; set; } = new(); 
         public SupportRequestStatus SupportRequestStatus { get; set; }
     }
 }

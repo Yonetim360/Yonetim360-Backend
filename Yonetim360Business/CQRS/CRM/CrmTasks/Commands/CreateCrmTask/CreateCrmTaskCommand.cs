@@ -14,8 +14,9 @@ namespace Yonetim360Business.CQRS.CRM.CrmTasks.Commands.CreateCrmTask
         public Guid CreatedBy { get; set; }
         public string Title { get; set; }
         public TaskCategory TaskCategory { get; set; }
-        public DateTime Time { get; set; }
-        public Guid RepresentativeId { get; set; }
+        public DateTime StartDate { get; set; }
+        public DateTime EndDate { get; set; }
+        public List<Guid> RepresentativeIds { get; set; }
         public string Description { get; set; }
     }
 }

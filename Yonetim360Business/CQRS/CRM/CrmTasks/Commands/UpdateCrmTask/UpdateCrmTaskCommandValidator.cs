@@ -21,7 +21,7 @@ namespace Yonetim360Business.CQRS.CRM.CrmTasks.Commands.UpdateCrmTask
                 .MaximumLength(100).WithMessage("Task title cannot exceed 100 characters.");
             RuleFor(x => x.CrmTaskDto.TaskCategory).IsInEnum()
                 .WithMessage("Task category must be a valid enum value.").NotEmpty().WithMessage("Category cannot empty");
-            RuleFor(x => x.CrmTaskDto.Representative).NotEmpty()
+            RuleFor(x => x.CrmTaskDto.RepresentativeIds).NotEmpty()
                 .WithMessage("Representative ID cannot be empty.");
             RuleFor(x => x.CrmTaskDto.Description).Length(0, 500)
                 .WithMessage("Description cannot exceed 500 characters.");

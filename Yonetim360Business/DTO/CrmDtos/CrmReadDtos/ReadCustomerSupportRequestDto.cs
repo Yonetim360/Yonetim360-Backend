@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Yonetim360.Entity.CRM;
+using Yonetim360Business.DTO.CrmDtos.CrmReadDtos;
 
 namespace Yonetim360Business.DTO.CrmReadDtos
 {
@@ -16,7 +17,7 @@ namespace Yonetim360Business.DTO.CrmReadDtos
         public string Subject { get; set; }
         public string Explanation { get; set; }
         public Priority Priority { get; set; }
-        public List<RepresentativeDto> Representatives { get; set; } = new();
+        public List<ReadCrmLightRepresentativeDto> Representatives { get; set; } = new();
         public SupportRequestStatus SupportRequestStatus { get; set; }
     }
 }

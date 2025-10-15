@@ -28,7 +28,7 @@ namespace Yonetim360Business.CQRS.CRM.Representatives.Commands.UpdateRepresentat
 
         public async Task<bool> Handle(UpdateRepresentativeCommand request, CancellationToken cancellationToken)
         {
-           var UpdatedUser = await _userRepository.GetFirstOrDefaultAsync(x=>x.Id==request.RepresentativeDto.UserId)??
+           var UpdatedUser = await _userRepository.GetFirstOrDefaultAsync(x=>x.Id==request.RepresentativeDto.UpdatedBy)??
                 throw new Exception("ApplicationUser not found");
 
             var updatedRepresentative = await _representativeRepository.GetFirstOrDefaultAsync(x => x.Id == request.RepresentativeDto.Id) ??
