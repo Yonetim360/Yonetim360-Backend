@@ -4,13 +4,13 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Yonetim360.Entity.CRM;
-using Yonetim360.Entity.İK;
 
 namespace Yonetim360Business.DTO
 {
     public class RepresentativeDto
     {
         public Guid Id { get; set; }
+        public Guid UserId { get; set; }
         public Guid UpdatedBy { get; set; }
         public string FirstName { get; set; }
         public string LastName { get; set; }

@@ -22,4 +22,8 @@
     <ProjectReference Include="..\Yonetim360Business\Yonetim360Business.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Controllers\CRM.Controller\CRM.RepresentativeRoleController\" />
+  </ItemGroup>
+
 </Project>

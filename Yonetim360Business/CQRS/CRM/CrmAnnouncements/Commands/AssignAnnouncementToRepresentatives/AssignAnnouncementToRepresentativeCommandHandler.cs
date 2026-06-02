@@ -8,6 +8,7 @@ using Yonetim360.DataAccess.Repository.Abstract;
 using Yonetim360.DataAccess.UnitOfWorks.Abstract;
 using Yonetim360.Entity;
 using Yonetim360.Entity.CRM;
+using Yonetim360.Entity.User;
 using Yonetim360Business.Mediator;
 using Yonetim360Business.SignalR.Services;
 

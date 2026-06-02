@@ -1,12 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using Yonetim360Business.DTO.WhatsAppDtos;
 
 namespace Yonetim360Business.Services.Abstract
 {
-    internal class IWhatsaapService
+    public interface IWhatsAppService
     {
+        Task<WhatsAppSendResultDto> SendAsync(WhatsAppOutboundMessageDto message, CancellationToken cancellationToken = default);
     }
 }

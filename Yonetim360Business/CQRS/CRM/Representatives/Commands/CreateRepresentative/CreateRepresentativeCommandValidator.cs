@@ -26,6 +26,9 @@ namespace Yonetim360Business.CQRS.CRM.Representatives.Commands.CreateRepresentat
                 .MaximumLength(20).WithMessage("Phone number cannot exceed 20 characters.");
             RuleFor(x => x.Notes)
                 .MaximumLength(300).WithMessage("Notes cannot exceed 300 characters.");
+            RuleFor(x => x.ApplicationUserId).NotNull()
+                .WithMessage("ApplicationUser ID is required.")
+                .Must(x => x != Guid.Empty).WithMessage("ApplicationUser ID cannot be empty.");
             RuleFor(x => x.CreatedBy).NotNull()
                 .WithMessage("ApplicationUser ID is required.")
                 .Must(x => x != Guid.Empty).WithMessage("ApplicationUser ID cannot be empty.");

@@ -7,10 +7,13 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Yonetim360.DataAccess.Data;
+using Yonetim360Business.BackgroundServices;
 using Yonetim360Business.Behaviors;
 using Yonetim360Business.CQRS.CRM.Customers.Commands.CreateCustomer;
 using Yonetim360Business.CQRS.Users.CreateUser;
 using Yonetim360Business.MappingProfile.CRM;
+using Yonetim360Business.Services.Abstract;
+using Yonetim360Business.Services.Concrete;
 using Yonetim360Business.SignalR.Services;
 
 namespace Yonetim360Business.ServiceRegistration
@@ -24,7 +27,12 @@ namespace Yonetim360Business.ServiceRegistration
             services.AddValidatorsFromAssemblyContaining<CreateCustomerCommand>();
             services.AddAutoMapper(typeof(MappingConfig));
             services.AddScoped<IAnnouncementHubService, AnnouncementHubService>();
-
+            services.AddScoped<ICurrentUserService, CurrentUserService>();
+            services.AddScoped<IEmailService, EmailService>();
+            services.AddScoped<ICrmTaskAssignmentEmailHandler, CrmTaskAssignmentEmailHandler>();
+            services.AddScoped<IWhatsAppService, WhatsAppService>();
+            services.AddScoped<IWhatsAppMessageDispatcher, WhatsAppMessageDispatcher>();
+            services.AddHostedService<WhatsAppReminderWorker>();
             return services;
 
         }

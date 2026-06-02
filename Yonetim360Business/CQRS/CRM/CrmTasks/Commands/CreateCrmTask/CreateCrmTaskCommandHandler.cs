@@ -7,10 +7,11 @@ using System.Text;
 using System.Threading.Tasks;
 using Yonetim360.DataAccess.Repository.Abstract;
 using Yonetim360.DataAccess.UnitOfWorks.Abstract;
-using Yonetim360.Entity;
 using Yonetim360.Entity.CRM;
+using Yonetim360.Entity.User;
 using Yonetim360Business.DTO;
 using Yonetim360Business.Mediator;
+using Yonetim360Business.Services.Abstract;
 
 namespace Yonetim360Business.CQRS.CRM.CrmTasks.Commands.CreateCrmTask
 {
@@ -21,10 +22,15 @@ namespace Yonetim360Business.CQRS.CRM.CrmTasks.Commands.CreateCrmTask
         private readonly IRepository<CrmTask> _repository;
         private readonly IRepository<ApplicationUser> _userRepository;
         private readonly IRepository<Representative> _representativeRepository;
-        public CreateCrmTaskCommandHandler(IUnitOfWork unitOfWork, IMapper mapper)
+        private readonly ICrmTaskAssignmentEmailHandler _assignmentEmailHandler;
+        public CreateCrmTaskCommandHandler(
+            IUnitOfWork unitOfWork,
+            IMapper mapper,
+            ICrmTaskAssignmentEmailHandler assignmentEmailHandler)
         {
             _unitOfWork = unitOfWork;
             _mapper = mapper;
+            _assignmentEmailHandler = assignmentEmailHandler;
             _repository = _unitOfWork.GetRepository<CrmTask>();
             _userRepository = _unitOfWork.GetRepository<ApplicationUser>();
             _representativeRepository = _unitOfWork.GetRepository<Representative>();
@@ -38,16 +44,31 @@ namespace Yonetim360Business.CQRS.CRM.CrmTasks.Commands.CreateCrmTask
             var newCrmTask = _mapper.Map<CrmTask>(request)
                 ?? throw new InvalidDataException("Mapping failed");
 
-            // ✅ DOĞRU - Mevcut entity'leri tek tek ekle
-            if (request.RepresentativeIds != null && request.RepresentativeIds.Any())
+            var requestedRepresentativeIds = request.RepresentativeIds?
+                .Where(x => x != Guid.Empty)
+                .Distinct()
+                .ToList() ?? new List<Guid>();
+
+            if (requestedRepresentativeIds.Any())
             {
                 var existingRepresentatives = await _representativeRepository
                     .GetAllAsync(
-                    filter:x => request.RepresentativeIds.Contains(x.Id),
+                    filter:x => requestedRepresentativeIds.Contains(x.Id),
                     tracked:true
                     );
 
-                // ✅ Her bir representative'i collection'a ekle
+                var representativeList = existingRepresentatives.ToList();
+                var foundRepresentativeIds = representativeList.Select(x => x.Id).ToHashSet();
+                var missingRepresentativeIds = requestedRepresentativeIds
+                    .Where(x => !foundRepresentativeIds.Contains(x))
+                    .ToList();
+
+                if (missingRepresentativeIds.Any())
+                {
+                    throw new InvalidDataException(
+                        $"Representative not found or not accessible for this tenant. Ids: {string.Join(", ", missingRepresentativeIds)}");
+                }
+
                 foreach (var rep in existingRepresentatives)
                 {
                     newCrmTask.Representative.Add(rep);
@@ -56,9 +77,11 @@ namespace Yonetim360Business.CQRS.CRM.CrmTasks.Commands.CreateCrmTask
 
             await _repository.CreateAsync(newCrmTask);
             await _unitOfWork.CommitAsync();
+            await _assignmentEmailHandler.SendAssignmentEmailsAsync(newCrmTask, newCrmTask.Representative);
 
             var crmTaskDto = _mapper.Map<CrmTaskDto>(newCrmTask)
                 ?? throw new InvalidDataException("Mapping to DTO failed");
+            crmTaskDto.RepresentativeIds = newCrmTask.Representative.Select(x => x.Id).ToList();
 
             return crmTaskDto;
 
