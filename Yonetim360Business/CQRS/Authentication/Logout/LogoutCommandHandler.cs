@@ -7,6 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Yonetim360.DataAccess.Data;
 using Yonetim360.Entity;
+using Yonetim360.Entity.User;
 using Yonetim360Business.Mediator;
 
 namespace Yonetim360Business.CQRS.Authentication.Logout

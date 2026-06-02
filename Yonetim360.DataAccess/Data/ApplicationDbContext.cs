@@ -11,6 +11,7 @@ using Yonetim360.DataAccess.Extensions;
 using Yonetim360.DataAccess.Services;
 using Yonetim360.Entity;
 using Yonetim360.Entity.CRM;
+using Yonetim360.Entity.User;
 
 namespace Yonetim360.DataAccess.Data
 {
@@ -35,14 +36,42 @@ namespace Yonetim360.DataAccess.Data
         public DbSet<Announcement> Announcements { get; set; }
         public DbSet<AnnouncementDepartment> AnnouncementDepartments { get; set; }
         public DbSet<AnnouncementRepresentative> AnnouncementRepresentatives { get; set; }
+        public DbSet<WhatsAppMessage> WhatsAppMessages { get; set; }
+        public DbSet<WhatsAppTemplate> WhatsAppTemplates { get; set; }
+        public DbSet<WhatsAppSettings> WhatsAppSettings { get; set; }
+
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
 
+            modelBuilder.Entity<WhatsAppMessage>()
+                .HasOne(x => x.Template)
+                .WithMany(x => x.Messages)
+                .HasForeignKey(x => x.TemplateId)
+                .OnDelete(DeleteBehavior.SetNull);
+
+            modelBuilder.Entity<WhatsAppMessage>()
+                .HasOne(x => x.Customer)
+                .WithMany()
+                .HasForeignKey(x => x.CustomerId)
+                .OnDelete(DeleteBehavior.SetNull);
+
+            modelBuilder.Entity<WhatsAppMessage>()
+                .HasIndex(x => x.ProviderMessageSid);
+
+            modelBuilder.Entity<WhatsAppMessage>()
+                .HasIndex(x => new { x.TenantId, x.Status, x.ScheduledAt });
+
+            modelBuilder.Entity<WhatsAppSettings>()
+                .HasIndex(x => x.TenantId)
+                .IsUnique();
+
             // Soft delete ve tenant filtreleri birlikte uygula
             ApplyCombinedFilters(modelBuilder);
         }
+
+
 
         private void ApplyCombinedFilters(ModelBuilder modelBuilder)
         {

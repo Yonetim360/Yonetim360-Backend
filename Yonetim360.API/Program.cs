@@ -4,18 +4,19 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
-using Yonetim360.DataAccess.Data;
-using Yonetim360.Entity;
-using Yonetim360.DataAccess.Extensions;
-using Yonetim360Business.ServiceRegistration;
-using Yonetim360.DataAccess.Services;
 using Yonetim360.API.Middlewares;
+using Yonetim360.DataAccess.Data;
+using Yonetim360.DataAccess.Extensions;
+using Yonetim360.DataAccess.Seed;
+using Yonetim360.DataAccess.Services;
+using Yonetim360.Entity.User;
+using Yonetim360Business.ServiceRegistration;
 
 namespace Yonetim360.API
 {
     public class Program
     {
-        public static void Main(string[] args)
+        public static async Task Main(string[] args)
         {
             var builder = WebApplication.CreateBuilder(args);
 
@@ -94,6 +95,13 @@ namespace Yonetim360.API
             builder.Services.AddSignalR();
 
             var app = builder.Build();
+
+            using (var scope = app.Services.CreateScope())
+            {
+                var roleManager = scope.ServiceProvider.GetRequiredService<RoleManager<ApplicationRole>>();
+                await ApplicationRoleSeed.SeedRoles(roleManager);
+            }
+
 
             if (app.Environment.IsDevelopment())
             {

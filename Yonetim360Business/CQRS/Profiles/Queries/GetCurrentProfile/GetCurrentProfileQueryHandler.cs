@@ -6,10 +6,10 @@ using System.Linq;
 using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
-using Yonetim360.Entity;
 using Yonetim360Business.DTO;
 using Yonetim360Business.Mediator;
 using System.IdentityModel.Tokens.Jwt;
+using Yonetim360.Entity.User;
 
 namespace Yonetim360Business.CQRS.Profiles.Queries.GetCurrentProfile
 {
@@ -27,7 +27,10 @@ namespace Yonetim360Business.CQRS.Profiles.Queries.GetCurrentProfile
 
         public async Task<CurrentUserDto> Handle(GetCurrentProfileQuery request, CancellationToken cancellationToken)
         {
-            var userId =  _httpContextAccessor.HttpContext.User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var userId =
+                _httpContextAccessor.HttpContext.User.FindFirstValue(ClaimTypes.NameIdentifier) ??
+                _httpContextAccessor.HttpContext.User.FindFirstValue(JwtRegisteredClaimNames.Sub) ??
+                _httpContextAccessor.HttpContext.User.FindFirstValue("sub");
             if (userId == null)
                 throw new UnauthorizedAccessException("Kullanıcı bulunamadı");
 
