@@ -64,6 +64,9 @@ namespace Yonetim360Business.CQRS.CRM.WhatsApp
                 (!string.IsNullOrWhiteSpace(settings.FromPhoneNumber) ||
                  !string.IsNullOrWhiteSpace(settings.MessagingServiceSid) ||
                  !string.IsNullOrWhiteSpace(configuration["Twilio:DefaultFromNumber"]));
+            var callbackConfigured =
+                !string.IsNullOrWhiteSpace(configuration["Twilio:StatusCallbackUrl"]) ||
+                !string.IsNullOrWhiteSpace(configuration["Twilio:StatusCallbackBaseUrl"]);
 
             return new WhatsAppSettingsDto
             {
@@ -77,7 +80,11 @@ namespace Yonetim360Business.CQRS.CRM.WhatsApp
                 RetryDelayMinutes = settings.RetryDelayMinutes,
                 AllowFreeFormScheduledMessages = settings.AllowFreeFormScheduledMessages,
                 ProviderConfigured = providerConfigured,
-                ConnectionStatus = providerConfigured ? "Configured" : "NotConfigured"
+                ConnectionStatus = !providerConfigured
+                    ? "NotConfigured"
+                    : callbackConfigured
+                        ? "Configured"
+                        : "ConfiguredWithoutStatusCallback"
             };
         }
 

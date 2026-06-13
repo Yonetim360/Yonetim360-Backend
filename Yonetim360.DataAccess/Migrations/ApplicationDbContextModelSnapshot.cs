@@ -17,7 +17,7 @@ namespace Yonetim360.DataAccess.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "8.0.18")
+                .HasAnnotation("ProductVersion", "10.0.8")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
@@ -987,6 +987,256 @@ namespace Yonetim360.DataAccess.Migrations
                     b.ToTable("Companies");
                 });
 
+            modelBuilder.Entity("Yonetim360.Entity.DocumentProcessing.AnalyzedPage", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<double>("ClassificationConfidence")
+                        .HasColumnType("float");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid>("CreatedBy")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid?>("DeletedBy")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<int>("DetectedDocumentType")
+                        .HasColumnType("int");
+
+                    b.Property<string>("DetectedKeywords")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int?>("DocumentGroupId")
+                        .HasColumnType("int");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<int>("PageNumber")
+                        .HasColumnType("int");
+
+                    b.Property<Guid>("ProcessedDocumentId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("TenantId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime?>("UpdatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid?>("UpdatedBy")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ProcessedDocumentId");
+
+                    b.ToTable("AnalyzedPages");
+                });
+
+            modelBuilder.Entity("Yonetim360.Entity.DocumentProcessing.ExtractedDocument", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<double>("AverageConfidence")
+                        .HasColumnType("float");
+
+                    b.Property<string>("CombinedKeywords")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid>("CreatedBy")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid?>("DeletedBy")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<int>("DocumentType")
+                        .HasColumnType("int");
+
+                    b.Property<int>("EndPageNumber")
+                        .HasColumnType("int");
+
+                    b.Property<string>("ExtractedFileName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ExtractedPdfPath")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ExtractionNotes")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("IsSuccessfullyExtracted")
+                        .HasColumnType("bit");
+
+                    b.Property<int>("PageCount")
+                        .HasColumnType("int");
+
+                    b.Property<Guid>("ProcessedDocumentId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<int>("StartPageNumber")
+                        .HasColumnType("int");
+
+                    b.Property<Guid>("TenantId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime?>("UpdatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid?>("UpdatedBy")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ProcessedDocumentId");
+
+                    b.ToTable("ExtractedDocuments");
+                });
+
+            modelBuilder.Entity("Yonetim360.Entity.DocumentProcessing.ProcessedDocument", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<double>("ClassificationConfidence")
+                        .HasColumnType("float");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid>("CreatedBy")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid?>("DeletedBy")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<int>("DetectedDocumentType")
+                        .HasColumnType("int");
+
+                    b.Property<string>("DetectedKeywords")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("FilePath")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("IsProcessed")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("Notes")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("OcrTextSample")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("PageCount")
+                        .HasColumnType("int");
+
+                    b.Property<int>("ProcessStatus")
+                        .HasColumnType("int");
+
+                    b.Property<Guid>("TenantId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime?>("UpdatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid?>("UpdatedBy")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("UploadedDocumentId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("UploadedDocumentId");
+
+                    b.ToTable("ProcessedDocuments");
+                });
+
+            modelBuilder.Entity("Yonetim360.Entity.DocumentProcessing.UploadedDocument", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid>("CreatedBy")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid?>("DeletedBy")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Extension")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<long>("FileSize")
+                        .HasColumnType("bigint");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("IsProcessed")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("MimeType")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("OriginalFileName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<Guid?>("OwnerId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("SourceModule")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("StoredFileName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("StoredPath")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<Guid>("TenantId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime?>("UpdatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid?>("UpdatedBy")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("UploadedDocuments");
+                });
+
             modelBuilder.Entity("Yonetim360.Entity.TokenBlacklist", b =>
                 {
                     b.Property<Guid>("Id")
@@ -1303,6 +1553,39 @@ namespace Yonetim360.DataAccess.Migrations
                     b.Navigation("Template");
                 });
 
+            modelBuilder.Entity("Yonetim360.Entity.DocumentProcessing.AnalyzedPage", b =>
+                {
+                    b.HasOne("Yonetim360.Entity.DocumentProcessing.ProcessedDocument", "ProcessedDocument")
+                        .WithMany("AnalyzedPages")
+                        .HasForeignKey("ProcessedDocumentId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("ProcessedDocument");
+                });
+
+            modelBuilder.Entity("Yonetim360.Entity.DocumentProcessing.ExtractedDocument", b =>
+                {
+                    b.HasOne("Yonetim360.Entity.DocumentProcessing.ProcessedDocument", "ProcessedDocument")
+                        .WithMany("ExtractedDocuments")
+                        .HasForeignKey("ProcessedDocumentId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("ProcessedDocument");
+                });
+
+            modelBuilder.Entity("Yonetim360.Entity.DocumentProcessing.ProcessedDocument", b =>
+                {
+                    b.HasOne("Yonetim360.Entity.DocumentProcessing.UploadedDocument", "UploadedDocument")
+                        .WithMany("ProcessedDocuments")
+                        .HasForeignKey("UploadedDocumentId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("UploadedDocument");
+                });
+
             modelBuilder.Entity("Yonetim360.Entity.Announcement", b =>
                 {
                     b.Navigation("AnnouncementDepartment")
@@ -1315,6 +1598,18 @@ namespace Yonetim360.DataAccess.Migrations
             modelBuilder.Entity("Yonetim360.Entity.CRM.WhatsAppTemplate", b =>
                 {
                     b.Navigation("Messages");
+                });
+
+            modelBuilder.Entity("Yonetim360.Entity.DocumentProcessing.ProcessedDocument", b =>
+                {
+                    b.Navigation("AnalyzedPages");
+
+                    b.Navigation("ExtractedDocuments");
+                });
+
+            modelBuilder.Entity("Yonetim360.Entity.DocumentProcessing.UploadedDocument", b =>
+                {
+                    b.Navigation("ProcessedDocuments");
                 });
 #pragma warning restore 612, 618
         }

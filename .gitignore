@@ -9,3 +9,4 @@ obj/
 
 # Diğer
 *.log
+Yonetim360.API/appsettings.Local.json

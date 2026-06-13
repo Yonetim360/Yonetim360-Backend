@@ -11,15 +11,16 @@ using Yonetim360.DataAccess.Extensions;
 using Yonetim360.DataAccess.Services;
 using Yonetim360.Entity;
 using Yonetim360.Entity.CRM;
+using Yonetim360.Entity.DocumentProcessing;
 using Yonetim360.Entity.User;
 
 namespace Yonetim360.DataAccess.Data
 {
     public class ApplicationDbContext : IdentityDbContext<ApplicationUser, ApplicationRole, Guid>
     {
-        private readonly ITenantProvider _tenantProvider;
+        private readonly ITenantProvider? _tenantProvider;
 
-        public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options, ITenantProvider tenantProvider)
+        public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options, ITenantProvider? tenantProvider)
             : base(options)
         {
             _tenantProvider = tenantProvider;
@@ -39,6 +40,10 @@ namespace Yonetim360.DataAccess.Data
         public DbSet<WhatsAppMessage> WhatsAppMessages { get; set; }
         public DbSet<WhatsAppTemplate> WhatsAppTemplates { get; set; }
         public DbSet<WhatsAppSettings> WhatsAppSettings { get; set; }
+        public DbSet<UploadedDocument> UploadedDocuments { get; set; }
+        public DbSet<ProcessedDocument> ProcessedDocuments { get; set; }
+        public DbSet<AnalyzedPage> AnalyzedPages { get; set; }
+        public DbSet<ExtractedDocument> ExtractedDocuments { get; set; }
 
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -130,8 +135,7 @@ namespace Yonetim360.DataAccess.Data
 
         private Guid GetCurrentTenantId()
         {
-            // runtimeda çağrılır
-            return _tenantProvider.TenantId;
+            return _tenantProvider?.TenantId ?? Guid.Empty;
         }
 
         public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)

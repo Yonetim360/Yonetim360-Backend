@@ -9,6 +9,7 @@ using Yonetim360.DataAccess.Data;
 using Yonetim360.DataAccess.Extensions;
 using Yonetim360.DataAccess.Seed;
 using Yonetim360.DataAccess.Services;
+using Yonetim360.Entity.DocumentProcessing;
 using Yonetim360.Entity.User;
 using Yonetim360Business.ServiceRegistration;
 
@@ -19,6 +20,7 @@ namespace Yonetim360.API
         public static async Task Main(string[] args)
         {
             var builder = WebApplication.CreateBuilder(args);
+            builder.Configuration.AddJsonFile("appsettings.Local.json", optional: true, reloadOnChange: true);
 
             // DbContext ekle
             builder.Services.AddDbContext<ApplicationDbContext>(options =>
@@ -36,15 +38,17 @@ namespace Yonetim360.API
             .AddEntityFrameworkStores<ApplicationDbContext>()
             .AddDefaultTokenProviders();
 
-            //// HttpContextAccessor (TenantProvider için)
+            //// HttpContextAccessor (TenantProvider iï¿½in)
             //builder.Services.AddHttpContextAccessor();
             //builder.Services.AddScoped<ITenantProvider, TenantProvider>();
 
             builder.Services.AddDataAccessServices(builder.Configuration);
             builder.Services.AddBusinessLayer();
+            builder.Services.Configure<DocumentStorageOptions>(
+                builder.Configuration.GetSection(DocumentStorageOptions.SectionName));
             builder.Services.AddSignalR(options =>
             {
-                options.EnableDetailedErrors = true; // Development için
+                options.EnableDetailedErrors = true; // Development iï¿½in
                 options.KeepAliveInterval = TimeSpan.FromSeconds(15);
                 options.ClientTimeoutInterval = TimeSpan.FromSeconds(30);
             });

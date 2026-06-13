@@ -102,6 +102,63 @@ namespace Yonetim360Business.Services.Concrete
             }
         }
 
+        public async Task<WhatsAppSendResultDto> GetMessageStatusAsync(string providerMessageSid, CancellationToken cancellationToken = default)
+        {
+            var accountSid = _configuration["Twilio:AccountSid"];
+            var authToken = _configuration["Twilio:AuthToken"];
+
+            if (string.IsNullOrWhiteSpace(accountSid) || string.IsNullOrWhiteSpace(authToken))
+            {
+                return new WhatsAppSendResultDto
+                {
+                    Status = WhatsAppMessageStatus.Failed,
+                    ErrorMessage = "Twilio account configuration is missing."
+                };
+            }
+
+            if (string.IsNullOrWhiteSpace(providerMessageSid))
+            {
+                return new WhatsAppSendResultDto
+                {
+                    Status = WhatsAppMessageStatus.Failed,
+                    ErrorMessage = "Provider message SID is missing."
+                };
+            }
+
+            try
+            {
+                var client = new TwilioRestClient(accountSid, authToken);
+                var response = await MessageResource.FetchAsync(pathSid: providerMessageSid, client: client);
+
+                return new WhatsAppSendResultDto
+                {
+                    ProviderMessageSid = response.Sid,
+                    Status = MapInitialStatus(response.Status?.ToString()),
+                    ErrorCode = response.ErrorCode?.ToString(),
+                    ErrorMessage = response.ErrorMessage
+                };
+            }
+            catch (ApiException ex)
+            {
+                return new WhatsAppSendResultDto
+                {
+                    ProviderMessageSid = providerMessageSid,
+                    Status = WhatsAppMessageStatus.Failed,
+                    ErrorCode = ex.Code.ToString(),
+                    ErrorMessage = ex.Message
+                };
+            }
+            catch (Exception ex)
+            {
+                return new WhatsAppSendResultDto
+                {
+                    ProviderMessageSid = providerMessageSid,
+                    Status = WhatsAppMessageStatus.Failed,
+                    ErrorMessage = ex.Message
+                };
+            }
+        }
+
         private static string FormatWhatsAppAddress(string phoneNumber)
         {
             var trimmed = phoneNumber.Trim();
